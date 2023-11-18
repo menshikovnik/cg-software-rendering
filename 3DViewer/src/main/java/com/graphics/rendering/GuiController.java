@@ -84,6 +84,12 @@ public class GuiController {
     }
 
     @FXML
+    public void deleteModel(){
+        mesh = null;
+
+    }
+
+    @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
     }
