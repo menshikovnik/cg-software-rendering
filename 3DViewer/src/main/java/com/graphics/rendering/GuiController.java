@@ -1,28 +1,29 @@
 package com.graphics.rendering;
 
-import com.graphics.rendering.render_engine.RenderEngine;
+import com.graphics.rendering.model.Model;
+import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
-import javafx.fxml.FXML;
+import com.graphics.rendering.render_engine.RenderEngine;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+
+import javax.vecmath.Vector3f;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.IOException;
-import java.io.File;
-import javax.vecmath.Vector3f;
-
-import com.graphics.rendering.model.Model;
-import com.graphics.rendering.objreader.ObjectReader;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GuiController {
 
-    final private float TRANSLATION = 0.5F;
+    final private float TRANSLATION = 0.75F;
 
     @FXML
     AnchorPane anchorPane;
@@ -30,12 +31,12 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
-    private Model mesh = null;
+    private List<Model> meshes = new LinkedList<>();
 
     private final Camera camera = new Camera(
-            new Vector3f(0, 0, 100),
+            new Vector3f(0, 0, 35),
             new Vector3f(0, 0, 0),
-            1.0F, 1, 0.01F, 100);
+            1.0F, 1, 0.01F, 80);
 
     @FXML
     private void initialize() {
@@ -52,8 +53,8 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
 
-            if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+            if (meshes != null) {
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
             }
         });
 
@@ -70,52 +71,55 @@ public class GuiController {
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
         if (file == null) {
             return;
-        }
+        } //todo сделать окно предупреждения
 
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
             String fileContent = Files.readString(fileName);
-            mesh = ObjectReader.read(fileContent);
-            // todo: доделать окно ошибки
+            meshes.add(ObjectReader.read(fileContent));
         } catch (IOException exception) {
-
+            // todo: доделать окно ошибки
         }
     }
 
     @FXML
-    public void deleteModel(){
-        mesh = null;
-
+    public void clearScene() {
+        meshes = new LinkedList<>();
     }
 
     @FXML
-    public void handleCameraForward(ActionEvent actionEvent) {
+    public void chooseModelOnClick(){
+        //todo сделать выбор модели по клику
+    }
+
+    @FXML
+    public void handleCameraForward() {
         camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
     }
 
     @FXML
-    public void handleCameraBackward(ActionEvent actionEvent) {
+    public void handleCameraBackward() {
         camera.movePosition(new Vector3f(0, 0, TRANSLATION));
     }
 
     @FXML
-    public void handleCameraLeft(ActionEvent actionEvent) {
+    public void handleCameraLeft() {
         camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
     }
 
     @FXML
-    public void handleCameraRight(ActionEvent actionEvent) {
+    public void handleCameraRight() {
         camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
     }
 
     @FXML
-    public void handleCameraUp(ActionEvent actionEvent) {
+    public void handleCameraUp() {
         camera.movePosition(new Vector3f(0, TRANSLATION, 0));
     }
 
     @FXML
-    public void handleCameraDown(ActionEvent actionEvent) {
+    public void handleCameraDown() {
         camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
     }
 }

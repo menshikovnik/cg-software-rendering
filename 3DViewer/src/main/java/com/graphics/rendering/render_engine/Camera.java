@@ -17,7 +17,8 @@ public class Camera {
             final float fov,
             final float aspectRatio,
             final float nearPlane,
-            final float farPlane) {
+            final float farPlane)
+    {
         this.position = position;
         this.target = target;
         this.fov = fov;
