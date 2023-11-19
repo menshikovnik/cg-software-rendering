@@ -1,10 +1,8 @@
-package com.graphics.rendering.math.vector.test;
+package vector_tests;
 
-import com.graphics.rendering.math.vector.*;
+import com.graphics.rendering.math.vector.Vector4D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class Vector4DTest {
 

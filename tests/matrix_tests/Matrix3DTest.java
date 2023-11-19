@@ -1,11 +1,10 @@
-package com.graphics.rendering.math.matrix.test;
+package matrix_tests;
 
-import com.graphics.rendering.math.matrix.*;
-import com.graphics.rendering.math.vector.*;
+import com.graphics.rendering.math.matrix.Matrix3D;
+import com.graphics.rendering.math.vector.Vector3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class Matrix3DTest {
 

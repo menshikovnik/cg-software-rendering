@@ -24,7 +24,7 @@ import java.util.List;
 public class GuiController {
 
     final private float TRANSLATION = 0.75F;
-
+    private Vector3f vector3f = new Vector3f(0, 0, 35);
     @FXML
     AnchorPane anchorPane;
 
@@ -34,7 +34,7 @@ public class GuiController {
     private List<Model> meshes = new LinkedList<>();
 
     private final Camera camera = new Camera(
-            new Vector3f(0, 0, 35),
+            vector3f,
             new Vector3f(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
@@ -89,7 +89,7 @@ public class GuiController {
     }
 
     @FXML
-    public void chooseModelOnClick(){
+    public void chooseModelOnClick() {
         //todo сделать выбор модели по клику
     }
 

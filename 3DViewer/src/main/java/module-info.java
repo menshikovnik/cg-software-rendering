@@ -3,9 +3,11 @@ module com.cgvsu {
     requires javafx.fxml;
     requires vecmath;
     requires java.desktop;
-    requires org.junit.jupiter.api;
 
 
-    opens com.graphics.rendering to javafx.fxml;
+    opens com.graphics.rendering to javafx.fxml, org.junit.jupiter.api;
     exports com.graphics.rendering;
+    exports com.graphics.rendering.math.matrix;
+    exports com.graphics.rendering.math.vector;
+
 }

@@ -1,11 +1,9 @@
-package com.graphics.rendering.math.matrix.test;
+package matrix_tests;
 
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector4D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class Matrix4DTest {
 
