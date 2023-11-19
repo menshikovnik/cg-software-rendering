@@ -8,6 +8,7 @@ import javax.vecmath.*;
 import com.graphics.rendering.model.Model;
 import static com.graphics.rendering.render_engine.GraphicConveyor.*;
 
+//Тут короче я artb22 потом переделаю надо добавить вычисление матрицы: модели, видовой, проекционной. Ещё с сеткой поработать
 public class RenderEngine {
 
     public static void render(

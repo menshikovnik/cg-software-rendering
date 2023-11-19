@@ -1,5 +1,8 @@
 package com.graphics.rendering.math;
 
+/**
+ * СТАРОЕ ГОВНО НЕ ИСПОЛЬЗУЕМ ЭТО!
+ */
 public class Vector3f {
     public Vector3f(float x, float y, float z) {
         this.x = x;
