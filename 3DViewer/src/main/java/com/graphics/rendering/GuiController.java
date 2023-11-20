@@ -7,8 +7,13 @@ import com.graphics.rendering.render_engine.RenderEngine;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ListView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -23,8 +28,7 @@ import java.util.List;
 
 public class GuiController {
 
-    final private float TRANSLATION = 0.75F;
-    private Vector3f vector3f = new Vector3f(0, 0, 35);
+    final private float TRANSLATION = 0.4F;
     @FXML
     AnchorPane anchorPane;
 
@@ -33,8 +37,12 @@ public class GuiController {
 
     private List<Model> meshes = new LinkedList<>();
 
-    private final Camera camera = new Camera(
-            vector3f,
+    @FXML
+    private ListView<String> fileName;
+    private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
+
+    private Camera camera = new Camera(
+            new Vector3f(0, 0, 35),
             new Vector3f(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
@@ -52,6 +60,7 @@ public class GuiController {
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
+            handleCameraDown(canvas);
 
             if (meshes != null) {
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
@@ -72,7 +81,8 @@ public class GuiController {
         if (file == null) {
             return;
         } //todo сделать окно предупреждения
-
+        this.tempFileName.add(file.getName());
+        this.fileName.setItems(tempFileName);
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
@@ -114,12 +124,22 @@ public class GuiController {
     }
 
     @FXML
-    public void handleCameraUp() {
-        camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+    public void backToZeroCoordinates() {
+        camera = new Camera(
+                new Vector3f(0, 0, 35),
+                new Vector3f(0, 0, 0),
+                1.0F, 1, 0.01F, 80);
     }
 
     @FXML
-    public void handleCameraDown() {
-        camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+    public void handleCameraDown(Node node) {
+        node.setOnScroll((ScrollEvent event) -> {
+            double deltaY = event.getDeltaY();
+            if (deltaY > 0) {
+                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+            } else if (deltaY < 0) {
+                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+            }
+        });
     }
 }
