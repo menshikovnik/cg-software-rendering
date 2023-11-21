@@ -103,4 +103,16 @@ class Matrix3DTest {
         Matrix3D result = new Matrix3D(result1);
         Assertions.assertTrue(check.equalsAns(result));
     }
+
+    @Test
+    void determinate() {
+        float[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 4},
+                {7, 8, 9}};
+        float result = -12;
+        Matrix3D matrix3D = new Matrix3D(matrix);
+        float check = matrix3D.determinate();
+        Assertions.assertEquals(result,check);
+    }
 }

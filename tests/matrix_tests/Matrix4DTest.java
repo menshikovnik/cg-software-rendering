@@ -127,4 +127,19 @@ class Matrix4DTest {
         Matrix4D result = new Matrix4D(result1);
         Assertions.assertTrue(check.equalsAns(result));
     }
+
+    @Test
+    void determinant() {
+        float[][] matrix = {
+                {1, 3, 3, 1},
+                {4, 5, 2, 4},
+                {1, 1, 9, 4},
+                {7, 8, 1, 1}
+        };
+        float result = 342;
+        Matrix4D matrix4D = new Matrix4D(matrix);
+        float check = matrix4D.determinant();
+        Assertions.assertEquals(result,check);
+
+    }
 }

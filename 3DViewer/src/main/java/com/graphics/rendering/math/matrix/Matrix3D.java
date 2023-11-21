@@ -170,6 +170,14 @@ public class Matrix3D {
         return new Matrix3D(transposed);
     }
 
+    public float determinate(){
+        if (matrix.length != 3 || matrix[0].length != 3) {
+            throw new IllegalArgumentException("Предоставленная матрица должна быть матрицей 3 на 3.");
+        }
+        return (matrix[0][0]*matrix[1][1]*matrix[2][2]-(matrix[0][2]*matrix[1][1]*matrix[2][0])
+                +matrix[0][1]*matrix[1][2]*matrix[2][0]-(matrix[0][1]*matrix[1][0]*matrix[2][2])
+                +matrix[0][2]*matrix[1][0]*matrix[2][1]-(matrix[0][0]*matrix[1][2]*matrix[2][1]));}
+
     public boolean equalsAns(Matrix3D matrix3D) {
         boolean flag = false;
         for (int i = 0; i < matrix.length; i++) {
@@ -181,4 +189,5 @@ public class Matrix3D {
         }
         return flag;
     }
+
 }
