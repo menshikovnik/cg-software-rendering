@@ -2,6 +2,7 @@ package com.graphics.rendering.render_engine;
 import javax.vecmath.*;
 
 public class GraphicConveyor {
+    // todo: Изменить на свой матан
 
     public static Matrix4f rotateScaleTranslate() {
         float[] matrix = new float[]{

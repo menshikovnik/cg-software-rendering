@@ -4,6 +4,7 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 public class Camera {
+    // todo: Изменить на свой матан
     private Vector3f position;
     private Vector3f target;
     private final float fov;
