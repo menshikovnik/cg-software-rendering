@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import static com.graphics.rendering.render_engine.GraphicConveyor.*;
 
-//todo artb22 надо добавить вычисление матрицы: модели, видовой, проекционной. Поработать с сеткой
+//todo artb22 надо добавить вычисление матрицы: модели(уже готово Аффиные преобразования), видовой, проекционной. Поработать с сеткой
 public class RenderEngine {
 
     public static void render(

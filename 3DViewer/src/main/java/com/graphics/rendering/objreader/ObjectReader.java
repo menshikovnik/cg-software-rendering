@@ -2,8 +2,6 @@ package com.graphics.rendering.objreader;
 
 import com.graphics.rendering.math.Vector2f;
 import com.graphics.rendering.math.Vector3f;
-import com.graphics.rendering.math.vector.Vector2D;
-import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.model.Polygon;
 

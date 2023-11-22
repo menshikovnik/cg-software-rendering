@@ -10,6 +10,13 @@ public class Vector2D {
         this.y = y;
     }
 
+    public float get(int index) {
+        switch (index){
+            case 0: return x;
+            case 1: return y;
+        }
+        throw new IllegalArgumentException();
+    }
     public float getX() {
         return x;
     }
@@ -80,7 +87,7 @@ public class Vector2D {
         float b = 0;
 
         float length = getLength();
-        if (Math.abs(length) > esp) {//модуль эпсилон
+        if (Math.abs(length) > esp) {
             a = x / length;
             b = y / length;
         } else {
@@ -106,7 +113,8 @@ public class Vector2D {
     }
 
     public boolean equalsAns(Vector2D vector2D) {
-        return x == vector2D.getX()
-                && y == vector2D.getY();
+        double number = 10000;
+        return Math.round(x * number) / number == Math.round(vector2D.getX() * number) / number
+                && Math.round(y * number) / number == Math.round(vector2D.getY() * number) / number;
     }
 }
