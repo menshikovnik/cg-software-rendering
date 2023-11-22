@@ -12,6 +12,14 @@ public class Vector3D {
         this.z = z;
     }
 
+    public float get(int index) {
+        switch (index){
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+        }
+        throw new IllegalArgumentException();
+    }
     public float getX() {
         return x;
     }
@@ -118,6 +126,13 @@ public class Vector3D {
         return new Vector3D(newX, newY, newZ);
     }
 
+    /**
+     * Операция перевода вектора 3 в вектор 4, где w = 1
+     */
+    public Vector4D translationToVector4D() {
+        return new Vector4D(getX(), getY(), getZ(), 1);
+    }
+
     @Override
     public String toString() {
         return "Vector3D{" +
@@ -126,9 +141,11 @@ public class Vector3D {
                 ", z=" + z +
                 '}';
     }
+
     public boolean equalsAns(Vector3D vector3D) {
-        return x == vector3D.getX()
-                && y == vector3D.getY()
-                && z == vector3D.getZ();
+        double number = 10000;
+        return Math.round(x * number) / number == Math.round(vector3D.getX() * number) / number
+                && Math.round(y * number) / number == Math.round(vector3D.getY() * number) / number
+                && Math.round(z * number) / number == Math.round(vector3D.getZ() * number) / number;
     }
 }

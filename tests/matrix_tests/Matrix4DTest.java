@@ -69,15 +69,10 @@ class Matrix4DTest {
                 {7, 8, 9, 4},
                 {7, 8, 9, 4}
         };
-        float[][] vector = {
-                {50},
-                {95},
-                {140},
-                {56}};
-        Vector4D vector4D = new Vector4D(5, 5,5,2);
+        Vector4D vector4D = new Vector4D(5, 5, 5, 2);
         Matrix4D matrix4D = new Matrix4D(matrix);
-        Matrix4D check = matrix4D.multiplyVector(vector4D);
-        Matrix4D result = new Matrix4D(vector);
+        Vector4D check = matrix4D.multiplyVector(vector4D);
+        Vector4D result = new Vector4D(38, 83, 128, 128);
         Assertions.assertTrue(check.equalsAns(result));
     }
 
@@ -96,10 +91,10 @@ class Matrix4DTest {
                 {7, 8, 9, 4}
         };
         float[][] result1 = {
-                {219, 36, 45, 30},
-                {444, 81, 102, 84},
-                {669, 126, 159, 138},
-                {669, 126, 159, 138}
+                {247, 68, 81, 46},
+                {472, 113, 138, 100},
+                {697, 158, 195, 154},
+                {697, 158, 195, 154}
         };
         Matrix4D matrix4D = new Matrix4D(matrix);
         Matrix4D matrix4D1 = new Matrix4D(matrix1);
@@ -139,7 +134,7 @@ class Matrix4DTest {
         float result = 342;
         Matrix4D matrix4D = new Matrix4D(matrix);
         float check = matrix4D.determinant();
-        Assertions.assertEquals(result,check);
+        Assertions.assertEquals(result, check);
 
     }
 }

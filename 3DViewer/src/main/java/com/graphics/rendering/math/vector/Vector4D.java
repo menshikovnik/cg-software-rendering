@@ -14,6 +14,20 @@ public class Vector4D {
         this.w = w;
     }
 
+    public float get(int index) {
+        switch (index) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+            case 3:
+                return w;
+        }
+        throw new IllegalArgumentException();
+    }
+
     public float getX() {
         return x;
     }
@@ -118,6 +132,13 @@ public class Vector4D {
         return this.x * v.getX() + this.y * v.getY() + this.z * v.getZ() + this.w * v.getW();
     }
 
+    /**
+     * Операция перевода вектора 4 в вектор 3, где w убираем
+     */
+    public Vector3D translationToVector3D() {
+        return new Vector3D(getX(), getY(), getZ());
+    }
+
     @Override
     public String toString() {
         return "Vector4D{" +
@@ -127,10 +148,12 @@ public class Vector4D {
                 ", w=" + w +
                 '}';
     }
+
     public boolean equalsAns(Vector4D vector4D) {
-        return x == vector4D.getX()
-                && y == vector4D.getY()
-                && z == vector4D.getZ()
-                && w == vector4D.getW();
+        double number = 10000;
+        return Math.round(x * number) / number == Math.round(vector4D.getX() * number) / number
+                && Math.round(y * number) / number == Math.round(vector4D.getY() * number) / number
+                && Math.round(z * number) / number == Math.round(vector4D.getZ() * number) / number
+                && Math.round(w * number) / number == Math.round(vector4D.getW() * number) / number;
     }
 }
