@@ -42,7 +42,7 @@
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" onAction="#backToZeroCoordinates" text="Back to zero coordinates">
+            <MenuItem mnemonicParsing="false" onAction="#backToZeroCoordinates" text="Return to home coordinates">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                 </accelerator>

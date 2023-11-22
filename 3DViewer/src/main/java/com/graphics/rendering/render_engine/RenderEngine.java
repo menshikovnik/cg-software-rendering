@@ -3,11 +3,10 @@ package com.graphics.rendering.render_engine;
 import com.graphics.rendering.math.Vector3f;
 import com.graphics.rendering.model.Model;
 import javafx.scene.canvas.GraphicsContext;
-
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import static com.graphics.rendering.render_engine.GraphicConveyor.*;
 
@@ -17,7 +16,7 @@ public class RenderEngine {
     public static void render(
             final GraphicsContext graphicsContext,
             final Camera camera,
-            final List<Model> meshes,
+            final HashMap<String, Model> meshes,
             final int width,
             final int height) {
         Matrix4f modelMatrix = rotateScaleTranslate();
@@ -27,7 +26,7 @@ public class RenderEngine {
         Matrix4f modelViewProjectionMatrix = new Matrix4f(modelMatrix);
         modelViewProjectionMatrix.mul(viewMatrix);
         modelViewProjectionMatrix.mul(projectionMatrix);
-        for (Model mesh : meshes) {
+        for (Model mesh : meshes.values()) {
             final int nPolygons = mesh.polygons.size();
             for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
                 final int nVerticesInPolygon = mesh.polygons.get(polygonInd).getVertexIndices().size();
