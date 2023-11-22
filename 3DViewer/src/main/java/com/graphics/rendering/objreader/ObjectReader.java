@@ -2,8 +2,6 @@ package com.graphics.rendering.objreader;
 
 import com.graphics.rendering.math.Vector2f;
 import com.graphics.rendering.math.Vector3f;
-import com.graphics.rendering.math.vector.Vector2D;
-import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.model.Polygon;
 
@@ -17,7 +15,11 @@ public class ObjectReader {
     private static final String OBJ_TEXTURE_TOKEN = "vt";
     private static final String OBJ_NORMAL_TOKEN = "vn";
     private static final String OBJ_FACE_TOKEN = "f";
-
+    private static final String OBJ_MTL_TOKEN = "mtllib";
+    public static final String COMMENT_TOKEN = "#";
+    public static final String USE_MTL_TOKEN = "usemtl";
+    public static final String NAME_OF_MODEL_TOKEN = "o";
+    public static final String SMOOTHING_FACTOR_TOKEN = "s";
     public static Model read(String fileContent) {
         Model result = new Model();
 
@@ -39,7 +41,14 @@ public class ObjectReader {
                 case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseTextureVertex(wordsInLine, lineInd));
                 case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
                 case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
+                case OBJ_MTL_TOKEN -> result.setMaterialTemplateLib(parseMaterialTextureLib(wordsInLine, lineInd));
+                case USE_MTL_TOKEN -> result.nameOfMaterial.add(parseMaterialTextureLib(wordsInLine, lineInd));
+                case NAME_OF_MODEL_TOKEN -> result.setNameOfModel(wordsInLine.get(0));
+                case SMOOTHING_FACTOR_TOKEN -> result.setNormalInterpolationFactor(Float.parseFloat(wordsInLine.get(0)));
                 default -> {
+                    if (!token.equals(COMMENT_TOKEN)) {
+                        throw new ObjReaderException("Token set incorrectly", lineInd);
+                    }
                 }
             }
         }
@@ -48,6 +57,10 @@ public class ObjectReader {
     }
 
     protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() != 3) {
+            throw new ObjReaderException("Too many vertex arguments", lineInd);
+        }
+
         try {
             return new Vector3f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
@@ -62,7 +75,21 @@ public class ObjectReader {
         }
     }
 
+    protected static String parseMaterialTextureLib(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            sb.append(wordsInLineWithoutToken.get(0));
+        } catch (ObjReaderException e) {
+            throw new ObjReaderException("The material texture format is set incorrectly", lineInd);
+        }
+        return sb.toString();
+    }
+
     protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() != 2) {
+            throw new ObjReaderException("Too many texture vertex arguments", lineInd);
+        }
+
         try {
             return new Vector2f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
@@ -77,6 +104,9 @@ public class ObjectReader {
     }
 
     protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() != 3) {
+            throw new ObjReaderException("Too many normal arguments", lineInd);
+        }
         try {
             return new Vector3f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
