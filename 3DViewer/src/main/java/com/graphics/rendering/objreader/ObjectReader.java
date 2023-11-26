@@ -2,6 +2,8 @@ package com.graphics.rendering.objreader;
 
 import com.graphics.rendering.math.Vector2f;
 import com.graphics.rendering.math.Vector3f;
+import com.graphics.rendering.math.vector.Vector2D;
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.model.Polygon;
 
@@ -45,9 +47,9 @@ public class ObjectReader {
         return result;
     }
 
-    protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector3D parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector3f(
+            return new Vector3D(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
@@ -60,9 +62,9 @@ public class ObjectReader {
         }
     }
 
-    protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector2D parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector2f(
+            return new Vector2D(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)));
 
@@ -74,9 +76,9 @@ public class ObjectReader {
         }
     }
 
-    protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static Vector3D parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
         try {
-            return new Vector3f(
+            return new Vector3D(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
