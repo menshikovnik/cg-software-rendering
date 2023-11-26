@@ -1,6 +1,7 @@
 package matrix_tests;
 
 import com.graphics.rendering.math.matrix.Matrix4D;
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.math.vector.Vector4D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ class Matrix4DTest {
     }
 
     @Test
-    void multiplyVector() {
+    void multiplyVector4D() {
         float[][] matrix = {
                 {1, 2, 3, 4},
                 {4, 5, 6, 4},
@@ -73,6 +74,20 @@ class Matrix4DTest {
         Matrix4D matrix4D = new Matrix4D(matrix);
         Vector4D check = matrix4D.multiplyVector(vector4D);
         Vector4D result = new Vector4D(38, 83, 128, 128);
+        Assertions.assertTrue(check.equalsAns(result));
+    }
+    @Test
+    void multiplyVector3D() {
+        float[][] matrix = {
+                {1, 2, 3, 4},
+                {4, 5, 6, 4},
+                {7, 8, 9, 4},
+                {7, 8, 9, 4}
+        };
+        Vector3D vector3D = new Vector3D(5, 5, 5);
+        Matrix4D matrix4D = new Matrix4D(matrix);
+        Vector3D check = matrix4D.multiplyVectorDivW(vector3D);
+        Vector3D result = new Vector3D(38, 83, 128);
         Assertions.assertTrue(check.equalsAns(result));
     }
 

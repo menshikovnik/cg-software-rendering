@@ -1,5 +1,6 @@
 package com.graphics.rendering.math.matrix;
 
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.math.vector.Vector4D;
 
 public class Matrix4D {
@@ -110,6 +111,22 @@ public class Matrix4D {
         }
         return new Vector4D(values[0], values[1], values[2], values[3]);
     }
+    public Vector3D multiplyVectorDivW(Vector3D vectorCol3D) {
+        if (vectorCol3D == null) {
+            throw new NullPointerException("Предоставленный вектор не может быть нулевым");
+        }
+        Vector4D vector4DCol = vectorCol3D.translationToVector4D();
+
+        float[] values = new float[4];
+        for (int i = 0; i < matrix.length; i++) {
+            values[i] = 0;
+            for (int j = 0; j < matrix[0].length; j++) {
+                values[i] += matrix[i][j] * vector4DCol.get(j);
+            }
+        }
+        return new Vector3D(values[0]/values[3], values[1]/values[3], values[2]/values[3]);
+    }
+
 
     /**
      * Операция перемножения матриц
