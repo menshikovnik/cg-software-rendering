@@ -1,7 +1,7 @@
 package com.graphics.rendering.math.vector;
 
 public class Vector2D {
-    private static final float esp = 1e-4f;
+    private static final float ESP = 1e-4f;
     private float x;
     private float y;
 
@@ -62,7 +62,7 @@ public class Vector2D {
      * Операция деления на скаляр
      */
     public Vector2D divScalar(float scalar) {
-        if (Math.abs(scalar) < esp) {
+        if (Math.abs(scalar) < ESP) {
             throw new IllegalArgumentException("Деление на ноль не допускается.");
         }
         float a = x / scalar;
@@ -87,7 +87,7 @@ public class Vector2D {
         float b = 0;
 
         float length = getLength();
-        if (Math.abs(length) > esp) {
+        if (Math.abs(length) > ESP) {
             a = x / length;
             b = y / length;
         } else {
@@ -113,8 +113,6 @@ public class Vector2D {
     }
 
     public boolean equalsAns(Vector2D vector2D) {
-        double number = 10000;
-        return Math.round(x * number) / number == Math.round(vector2D.getX() * number) / number
-                && Math.round(y * number) / number == Math.round(vector2D.getY() * number) / number;
+        return Math.abs(x - vector2D.x) < ESP && Math.abs(y - vector2D.y) < ESP;
     }
 }
