@@ -1,67 +1,115 @@
 package triangulation_test;
 
 
+import com.graphics.rendering.math.Vector3f;
+import com.graphics.rendering.model.Polygon;
 import com.graphics.rendering.model.Triangle;
-import com.graphics.rendering.model.Triangulation;
+import com.graphics.rendering.render_engine.Triangulation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class TriangulationTest {
-    ArrayList<Point2D.Double> polygon = new ArrayList<>();
+    ArrayList<Polygon> polygons = new ArrayList<>();
     ArrayList<Triangle> triangles = new ArrayList<>();
+    ArrayList<Vector3f> vertices = new ArrayList<>();
+
     @Before
     public void clear(){
-        polygon.clear();
         triangles.clear();
+        polygons.clear();
+        vertices.clear();
     }
 
     @Test
     public void ShouldCountTrianglesFromThreeVertex() {
 
+        Polygon polygon = new Polygon();
+        polygons.add(polygon);
 
-        polygon.add(new Point2D.Double(100, 100));
-        polygon.add(new Point2D.Double(150, 200));
-        polygon.add(new Point2D.Double(100, 200));
+        vertices.add(new Vector3f(100, 100,3));
+        vertices.add(new Vector3f(150, 200,3));
+        vertices.add(new Vector3f(100, 200,3));
 
+        polygon.getVertexIndices().add(0);
+        polygon.getVertexIndices().add(1);
+        polygon.getVertexIndices().add(2);
 
-        triangles = Triangulation.triangulate(polygon);
+        triangles = Triangulation.triangulate(polygons,vertices);
 
         Assert.assertEquals(1,triangles.size());
 
 
     }
     @Test
-    public void ShouldCountTrianglesFromEightVertex(){
-        polygon.add(new Point2D.Double(200, 100));
-        polygon.add(new Point2D.Double(100, 120));
-        polygon.add(new Point2D.Double(100, 140));
-        polygon.add(new Point2D.Double(200, 200));
-        polygon.add(new Point2D.Double(300, 200));
-        polygon.add(new Point2D.Double(350, 140));
-        polygon.add(new Point2D.Double(350, 120));
-        polygon.add(new Point2D.Double(300, 100));
+    public void ShouldCountTrianglesFromTwoPolygons(){
+
+        Polygon polygon = new Polygon();
+        Polygon polygon2 = new Polygon();
+        polygons.add(polygon);
+        polygons.add(polygon2);
 
 
-        triangles = Triangulation.triangulate(polygon);
+        vertices.add(new Vector3f(200, 100,3));
+        vertices.add(new Vector3f(100, 120,3));
+        vertices.add(new Vector3f(100, 140,3));
+        vertices.add(new Vector3f(200, 200,3));
+        vertices.add(new Vector3f(300, 200,3));
+        vertices.add(new Vector3f(350, 140,3));
+        vertices.add(new Vector3f(350, 120,3));
+        vertices.add(new Vector3f(300, 100,3));
 
-        Assert.assertEquals(6,triangles.size());
+        vertices.add(new Vector3f(100, 100,3));
+        vertices.add(new Vector3f(150, 200,3));
+        vertices.add(new Vector3f(100, 200,3));
+
+
+        polygon.getVertexIndices().add(0);
+        polygon.getVertexIndices().add(1);
+        polygon.getVertexIndices().add(2);
+        polygon.getVertexIndices().add(3);
+        polygon.getVertexIndices().add(4);
+        polygon.getVertexIndices().add(5);
+        polygon.getVertexIndices().add(6);
+        polygon.getVertexIndices().add(7);
+
+
+
+        polygon2.getVertexIndices().add(0);
+        polygon2.getVertexIndices().add(1);
+        polygon2.getVertexIndices().add(2);
+
+
+        triangles = Triangulation.triangulate(polygons,vertices);
+        Assert.assertEquals(7,triangles.size());
     }
     @Test
     public void ShouldCountTrianglesFromSixVertex(){
-        polygon.add(new Point2D.Double(100, 100));
-        polygon.add(new Point2D.Double(100, 200));
-        polygon.add(new Point2D.Double(150, 250));
-        polygon.add(new Point2D.Double(200, 200));
-        polygon.add(new Point2D.Double(200, 100));
-        polygon.add(new Point2D.Double(150, 50));
-        triangles = Triangulation.triangulate(polygon);
+        Polygon polygon = new Polygon();
+        polygons.add(polygon);
+
+        vertices.add(new Vector3f(100, 100,3));
+        vertices.add(new Vector3f(100, 200,3));
+        vertices.add(new Vector3f(150, 250,3));
+        vertices.add(new Vector3f(200, 200,3));
+        vertices.add(new Vector3f(200, 100,3));
+        vertices.add(new Vector3f(150, 50,3));
+
+        polygon.getVertexIndices().add(0);
+        polygon.getVertexIndices().add(1);
+        polygon.getVertexIndices().add(2);
+        polygon.getVertexIndices().add(3);
+        polygon.getVertexIndices().add(4);
+        polygon.getVertexIndices().add(5);
+
+
+
+        triangles = Triangulation.triangulate(polygons,vertices);
 
         Assert.assertEquals(4,triangles.size());
     }
 
-}
 
+}
