@@ -2,11 +2,9 @@ package com.graphics.rendering.render_engine;
 
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector3D;
-
-import javax.vecmath.*;
+import javax.vecmath.Point2f;
 
 public class GraphicConveyor {
-    // todo: Изменить на свой матан
 
     public static Matrix4D translateRotateScale() {
         return new Matrix4D(true);
@@ -63,6 +61,6 @@ public class GraphicConveyor {
 
 
     public static Point2f vertexToPoint(final Vector3D vertex, final int width, final int height) {
-        return new Point2f((width - 1) / 2.0F * (vertex.getX() + 1), (1 - height) / 2.0F * (vertex.getY() + 1));
+        return new Point2f(vertex.getX() * width + width / 2.0F, -vertex.getY() * height + height / 2.0F);
     }
 }

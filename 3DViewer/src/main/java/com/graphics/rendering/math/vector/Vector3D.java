@@ -156,4 +156,11 @@ public class Vector3D {
     public boolean equalsAns(Vector3D vector3D) {
         return Math.abs(x - vector3D.x) < ESP && Math.abs(y - vector3D.y) < ESP && Math.abs(z - vector3D.z) < ESP;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector3D other)) return false;
+        return Math.abs(x - other.x) < ESP && Math.abs(y - other.y) < ESP && Math.abs(z - other.z) < ESP;
+    }
 }

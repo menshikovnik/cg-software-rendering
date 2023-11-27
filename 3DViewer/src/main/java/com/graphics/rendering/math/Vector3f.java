@@ -2,16 +2,18 @@ package com.graphics.rendering.math;
 
 
 public class Vector3f {
-    public float x, y, z;
+    private float x, y, z;
+    private final float eps = 1e-7f;
+
     public Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public boolean equals(Vector3f other) {
-        // todo: желательно, чтобы это была глобальная константа
-        final float eps = 1e-7f;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector3f other)) return false;
         return Math.abs(x - other.x) < eps && Math.abs(y - other.y) < eps && Math.abs(z - other.z) < eps;
     }
 

@@ -24,7 +24,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import javax.vecmath.Vector3f;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +33,7 @@ import java.util.HashMap;
 public class GuiController {
 
     final private float TRANSLATION = 0.4F;
+    private static final double FPS = 60;
     @FXML
     AnchorPane anchorPane;
 
@@ -62,7 +62,7 @@ public class GuiController {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
-        KeyFrame frame = new KeyFrame(Duration.millis(60), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(1000 / FPS), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -115,6 +115,7 @@ public class GuiController {
     public void clearScene() {
         meshes = new HashMap<>();
         fileName.setItems(null);
+        tempFileName.clear();
     }
 
     @FXML

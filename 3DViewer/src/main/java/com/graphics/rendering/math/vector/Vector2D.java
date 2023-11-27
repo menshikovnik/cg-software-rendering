@@ -1,5 +1,7 @@
 package com.graphics.rendering.math.vector;
 
+import com.graphics.rendering.math.Vector2f;
+
 public class Vector2D {
     private static final float ESP = 1e-4f;
     private float x;
@@ -114,5 +116,12 @@ public class Vector2D {
 
     public boolean equalsAns(Vector2D vector2D) {
         return Math.abs(x - vector2D.x) < ESP && Math.abs(y - vector2D.y) < ESP;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector2D other)) return false;
+        return Math.abs(x - other.x) < ESP && Math.abs(y - other.y) < ESP;
     }
 }
