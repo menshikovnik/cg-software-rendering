@@ -4,7 +4,7 @@ package triangulation_test;
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Polygon;
 import com.graphics.rendering.model.Triangle;
-import com.graphics.rendering.render_engine.Triangulation;
+import com.graphics.rendering.model.Triangulation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.graphics.rendering.render_engine;
+package com.graphics.rendering.model;
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Polygon;
 import com.graphics.rendering.model.Triangle;
