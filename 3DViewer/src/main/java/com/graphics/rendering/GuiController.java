@@ -2,6 +2,7 @@ package com.graphics.rendering;
 
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
+import com.graphics.rendering.objreader.ObjReaderException;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
 import com.graphics.rendering.render_engine.RenderEngine;
@@ -14,9 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -94,20 +93,21 @@ public class GuiController {
 
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
 
-        if (file == null) {
-            return;
-        } //todo сделать окно предупреждения
-
-        this.tempFileName.add(file.getName());
-        this.fileName.setItems(tempFileName);
+        if (isFileNull(file)) {
+            showAlertWindow(Alert.AlertType.ERROR, "File is null", ButtonType.CLOSE);
+        }
 
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
             String fileContent = Files.readString(fileName);
             meshes.put(file.getName(), ObjectReader.read(fileContent));
+            this.tempFileName.add(file.getName());
+            this.fileName.setItems(tempFileName);
         } catch (IOException exception) {
-            // todo: доделать окно ошибки
+            showAlertWindow(Alert.AlertType.ERROR, exception.getMessage(), ButtonType.CLOSE);
+        } catch (ObjReaderException exception) {
+            showAlertWindow(Alert.AlertType.WARNING, exception.getMessage(), ButtonType.CLOSE);
         }
     }
 
@@ -175,6 +175,15 @@ public class GuiController {
         contextMenu.getItems().add(deleteItem);
         double yOffset = 10.5; //для смещения элемента контекстного меню вниз
         contextMenu.show(fileName, event.getScreenX(), event.getScreenY() + yOffset);
+    }
+
+    public static void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType){
+        Alert alert = new Alert(alertType, message, buttonType);
+        alert.showAndWait();
+    }
+
+    public static boolean isFileNull(File file){
+        return file != null;
     }
 
     public ListView<String> getFileName() {
