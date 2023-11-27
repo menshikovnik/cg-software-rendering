@@ -1,6 +1,5 @@
 package com.graphics.rendering.math.vector;
 
-import com.graphics.rendering.math.Vector2f;
 
 public class Vector2D {
     private static final float ESP = 1e-4f;

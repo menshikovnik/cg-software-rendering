@@ -2,6 +2,7 @@ package com.graphics.rendering.render_engine;
 
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector3D;
+
 import javax.vecmath.Point2f;
 
 public class GraphicConveyor {
@@ -52,8 +53,8 @@ public class GraphicConveyor {
             final float farPlane) {
         float tangentMinusOnDegree = (float) (1.0F / (Math.tan(fov * 0.5F)));
         float[][] projection = new float[][]
-                {{tangentMinusOnDegree, 0, 0, 0},
-                        {0, tangentMinusOnDegree / aspectRatio, 0, 0},
+                {{tangentMinusOnDegree / aspectRatio, 0, 0, 0},
+                        {0, tangentMinusOnDegree, 0, 0},
                         {0, 0, (farPlane + nearPlane) / (farPlane - nearPlane), 2 * (nearPlane * farPlane) / (nearPlane - farPlane)},
                         {0, 0, 1, 0}};
         return new Matrix4D(projection);
@@ -61,6 +62,6 @@ public class GraphicConveyor {
 
 
     public static Point2f vertexToPoint(final Vector3D vertex, final int width, final int height) {
-        return new Point2f(vertex.getX() * width + width / 2.0F, -vertex.getY() * height + height / 2.0F);
+        return new Point2f ((width - 1) / 2.0f * vertex.getX() + (width - 1) / 2.0f , (1 - height) / 2.0F * vertex.getY() + (height - 1) / 2.0F);
     }
 }
