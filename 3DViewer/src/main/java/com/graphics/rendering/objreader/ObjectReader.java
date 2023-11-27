@@ -182,6 +182,7 @@ public class ObjectReader {
             ArrayList<Integer> onePolygonVertexIndices,
             ArrayList<Integer> onePolygonTextureVertexIndices,
             ArrayList<Integer> onePolygonNormalIndices) {
+        int size = onePolygonVertexIndices.size();
         if (onePolygonVertexIndices.size() < 3) {
             return false;
         }
@@ -191,7 +192,7 @@ public class ObjectReader {
         if (!onePolygonNormalIndices.isEmpty() && onePolygonNormalIndices.size() < 3) {
             return false;
         }
-        return true;
+        return (onePolygonNormalIndices.size() == size) && (onePolygonTextureVertexIndices.size() == size);
     }
 
     protected static String parseNameOfModel(final ArrayList<String> wordsInLineWithoutToken,

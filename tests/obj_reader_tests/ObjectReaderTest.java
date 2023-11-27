@@ -276,6 +276,28 @@ public class ObjectReaderTest extends ObjectReader {
     }
 
     @Test
+    void testParseFace09() {
+        ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("1/1/1", "2/2/2", "3/3/3", "4//4"));
+        try {
+            ObjectReader.parseFace(wordsInLineWithoutToken, 8);
+        } catch (ObjReaderException exception) {
+            String expectedError = "Error parsing OBJ file on line: 8. Incorrect face format.";
+            Assertions.assertEquals(expectedError, exception.getMessage());
+        }
+    }
+
+    @Test
+    void testParseFace10() {
+        ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("1/1/1", "2/2/2", "3/3/3", "4/4/"));
+        try {
+            ObjectReader.parseFace(wordsInLineWithoutToken, 8);
+        } catch (ObjReaderException exception) {
+            String expectedError = "Error parsing OBJ file on line: 8. Incorrect face format.";
+            Assertions.assertEquals(expectedError, exception.getMessage());
+        }
+    }
+
+    @Test
     void testParseNameOfModel01() {
         ArrayList<String> wordsInLineWithoutToken = new ArrayList<>(Arrays.asList("Cube", "LK"));
         try {
