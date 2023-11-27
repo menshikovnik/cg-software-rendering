@@ -1,7 +1,7 @@
 package com.graphics.rendering.objreader;
 
-import com.graphics.rendering.math.Vector2f;
-import com.graphics.rendering.math.Vector3f;
+import com.graphics.rendering.math.vector.Vector2D;
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.model.Polygon;
 
@@ -20,6 +20,7 @@ public class ObjectReader {
     public static final String USE_MTL_TOKEN = "usemtl";
     public static final String NAME_OF_MODEL_TOKEN = "o";
     public static final String SMOOTHING_FACTOR_TOKEN = "s";
+
     public static Model read(String fileContent) {
         Model result = new Model();
 
@@ -43,79 +44,86 @@ public class ObjectReader {
                 case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
                 case OBJ_MTL_TOKEN -> result.setMaterialTemplateLib(parseMaterialTextureLib(wordsInLine, lineInd));
                 case USE_MTL_TOKEN -> result.nameOfMaterial.add(parseMaterialTextureLib(wordsInLine, lineInd));
-                case NAME_OF_MODEL_TOKEN -> result.setNameOfModel(wordsInLine.get(0));
-                case SMOOTHING_FACTOR_TOKEN -> result.setNormalInterpolationFactor(Float.parseFloat(wordsInLine.get(0)));
+                case NAME_OF_MODEL_TOKEN -> result.setNameOfModel(parseNameOfModel(wordsInLine, lineInd));
+                case SMOOTHING_FACTOR_TOKEN ->
+                        result.setNormalInterpolationFactor(parseNormalInterpolationFactor(wordsInLine, lineInd));
                 default -> {
                     if (!token.equals(COMMENT_TOKEN)) {
-                        throw new ObjReaderException("Token set incorrectly", lineInd);
+                        throw new ObjReaderException("Token set incorrectly.", lineInd);
                     }
                 }
             }
         }
-
         return result;
     }
 
-    protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        if (wordsInLineWithoutToken.size() != 3) {
-            throw new ObjReaderException("Too many vertex arguments", lineInd);
+
+    protected static Vector3D parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() > 3) {
+            throw new ObjReaderException("Too many vertex arguments.", lineInd);
         }
 
         try {
-            return new Vector3f(
+            return new Vector3D(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
 
         } catch (NumberFormatException e) {
             throw new ObjReaderException("Failed to parse float value.", lineInd);
-
         } catch (IndexOutOfBoundsException e) {
             throw new ObjReaderException("Too few vertex arguments.", lineInd);
         }
     }
 
-    protected static String parseMaterialTextureLib(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+    protected static String parseMaterialTextureLib(final ArrayList<String> wordsInLineWithoutToken,
+                                                    int lineInd) {
+        if (wordsInLineWithoutToken.size() > 1 || wordsInLineWithoutToken.get(0).isEmpty() || wordsInLineWithoutToken.contains(" ")) {
+            throw new ObjReaderException("The material texture format is set incorrectly.", lineInd);
+        }
         StringBuilder sb = new StringBuilder();
         try {
             sb.append(wordsInLineWithoutToken.get(0));
-        } catch (ObjReaderException e) {
-            throw new ObjReaderException("The material texture format is set incorrectly", lineInd);
+        } catch (RuntimeException e) {
+            throw new ObjReaderException("The material texture format is set incorrectly.", lineInd);
         }
         return sb.toString();
     }
 
-    protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        if (wordsInLineWithoutToken.size() != 2) {
-            throw new ObjReaderException("Too many texture vertex arguments", lineInd);
-        }
+    protected static Vector2D parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 
-        try {
-            return new Vector2f(
-                    Float.parseFloat(wordsInLineWithoutToken.get(0)),
-                    Float.parseFloat(wordsInLineWithoutToken.get(1)));
 
-        } catch (NumberFormatException e) {
-            throw new ObjReaderException("Failed to parse float value.", lineInd);
+        {
+            if (wordsInLineWithoutToken.size() > 2) {
+                throw new ObjReaderException("Too many texture vertex arguments.", lineInd);
+            }
 
-        } catch (IndexOutOfBoundsException e) {
-            throw new ObjReaderException("Too few texture vertex arguments.", lineInd);
+            try {
+                return new Vector2D(
+                        Float.parseFloat(wordsInLineWithoutToken.get(0)),
+                        Float.parseFloat(wordsInLineWithoutToken.get(1)));
+
+            } catch (NumberFormatException e) {
+                throw new ObjReaderException("Failed to parse float value.", lineInd);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ObjReaderException("Too few texture vertex arguments.", lineInd);
+            }
         }
     }
 
-    protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        if (wordsInLineWithoutToken.size() != 3) {
-            throw new ObjReaderException("Too many normal arguments", lineInd);
+    protected static Vector3D parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
+        if (wordsInLineWithoutToken.size() > 3) {
+            throw new ObjReaderException("Too many normal arguments.", lineInd);
         }
+
         try {
-            return new Vector3f(
+            return new Vector3D(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
                     Float.parseFloat(wordsInLineWithoutToken.get(1)),
                     Float.parseFloat(wordsInLineWithoutToken.get(2)));
 
         } catch (NumberFormatException e) {
             throw new ObjReaderException("Failed to parse float value.", lineInd);
-
         } catch (IndexOutOfBoundsException e) {
             throw new ObjReaderException("Too few normal arguments.", lineInd);
         }
@@ -126,14 +134,18 @@ public class ObjectReader {
         ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<>();
         ArrayList<Integer> onePolygonNormalIndices = new ArrayList<>();
 
-        for (String s : wordsInLineWithoutToken) {
-            parseFaceWord(s, onePolygonVertexIndices, onePolygonTextureVertexIndices, onePolygonNormalIndices, lineInd);
+        for (String str : wordsInLineWithoutToken) {
+            parseFaceWord(str, onePolygonVertexIndices, onePolygonTextureVertexIndices, onePolygonNormalIndices, lineInd);
         }
 
         Polygon result = new Polygon();
-        result.setVertexIndices(onePolygonVertexIndices);
-        result.setTextureVertexIndices(onePolygonTextureVertexIndices);
-        result.setNormalIndices(onePolygonNormalIndices);
+
+        if (checkCorrectFaceFormat(onePolygonVertexIndices, onePolygonTextureVertexIndices, onePolygonNormalIndices)) {
+            result.setVertexIndices(onePolygonVertexIndices);
+            result.setTextureVertexIndices(onePolygonTextureVertexIndices);
+            result.setNormalIndices(onePolygonNormalIndices);
+        } else throw new ObjReaderException("Incorrect face format.", lineInd);
+
         return result;
     }
 
@@ -169,5 +181,36 @@ public class ObjectReader {
         } catch (IndexOutOfBoundsException e) {
             throw new ObjReaderException("Too few arguments.", lineInd);
         }
+    }
+
+    public static boolean checkCorrectFaceFormat(
+            ArrayList<Integer> onePolygonVertexIndices,
+            ArrayList<Integer> onePolygonTextureVertexIndices,
+            ArrayList<Integer> onePolygonNormalIndices) {
+        if (onePolygonVertexIndices.size() < 3) {
+            return false;
+        }
+        if (!onePolygonTextureVertexIndices.isEmpty() && onePolygonTextureVertexIndices.size() < 3) {
+            return false;
+        }
+        if (!onePolygonNormalIndices.isEmpty() && onePolygonNormalIndices.size() < 3) {
+            return false;
+        }
+        return true;
+    }
+
+    protected static String parseNameOfModel(final ArrayList<String> wordsInLineWithoutToken,
+                                             int lineInd) {
+        if (wordsInLineWithoutToken.size() > 1) {
+            throw new ObjReaderException("Incorrect name of model", lineInd);
+        } else return wordsInLineWithoutToken.get(0);
+    }
+
+    public static float parseNormalInterpolationFactor(
+            final ArrayList<String> wordsInLineWithoutToken,
+            int lineInd) {
+        if (wordsInLineWithoutToken.size() > 1) {
+            throw new ObjReaderException("Incorrect normal interpolation factor", lineInd);
+        } else return Float.parseFloat(wordsInLineWithoutToken.get(0));
     }
 }

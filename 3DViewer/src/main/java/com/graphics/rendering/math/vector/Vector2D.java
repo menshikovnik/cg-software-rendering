@@ -1,7 +1,9 @@
 package com.graphics.rendering.math.vector;
 
+import com.graphics.rendering.math.Vector2f;
+
 public class Vector2D {
-    private static final float esp = 1e-4f;
+    private static final float ESP = 1e-4f;
     private float x;
     private float y;
 
@@ -10,6 +12,13 @@ public class Vector2D {
         this.y = y;
     }
 
+    public float get(int index) {
+        switch (index){
+            case 0: return x;
+            case 1: return y;
+        }
+        throw new IllegalArgumentException();
+    }
     public float getX() {
         return x;
     }
@@ -55,7 +64,7 @@ public class Vector2D {
      * Операция деления на скаляр
      */
     public Vector2D divScalar(float scalar) {
-        if (Math.abs(scalar) < esp) {
+        if (Math.abs(scalar) < ESP) {
             throw new IllegalArgumentException("Деление на ноль не допускается.");
         }
         float a = x / scalar;
@@ -80,7 +89,7 @@ public class Vector2D {
         float b = 0;
 
         float length = getLength();
-        if (Math.abs(length) > esp) {//модуль эпсилон
+        if (Math.abs(length) > ESP) {
             a = x / length;
             b = y / length;
         } else {
@@ -106,7 +115,13 @@ public class Vector2D {
     }
 
     public boolean equalsAns(Vector2D vector2D) {
-        return x == vector2D.getX()
-                && y == vector2D.getY();
+        return Math.abs(x - vector2D.x) < ESP && Math.abs(y - vector2D.y) < ESP;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector2D other)) return false;
+        return Math.abs(x - other.x) < ESP && Math.abs(y - other.y) < ESP;
     }
 }

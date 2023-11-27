@@ -1,5 +1,6 @@
 package com.graphics.rendering;
 
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
@@ -23,7 +24,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import javax.vecmath.Vector3f;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +33,7 @@ import java.util.HashMap;
 public class GuiController {
 
     final private float TRANSLATION = 0.4F;
+    private static final double FPS = 60;
     @FXML
     AnchorPane anchorPane;
 
@@ -48,8 +49,8 @@ public class GuiController {
     private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
 
     private Camera camera = new Camera(
-            new Vector3f(0, 0, 35),
-            new Vector3f(0, 0, 0),
+            new Vector3D(0, 0, 35),
+            new Vector3D(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
     @FXML
@@ -61,7 +62,7 @@ public class GuiController {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
-        KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(1000 / FPS), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -124,29 +125,29 @@ public class GuiController {
 
     @FXML
     public void handleCameraForward() {
-        camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+        camera.movePosition(new Vector3D(0, 0, -TRANSLATION));
     }
 
     @FXML
     public void handleCameraBackward() {
-        camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+        camera.movePosition(new Vector3D(0, 0, TRANSLATION));
     }
 
     @FXML
     public void handleCameraLeft() {
-        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3D(TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraRight() {
-        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3D(-TRANSLATION, 0, 0));
     }
 
     @FXML
     public void backToZeroCoordinates() {
         camera = new Camera(
-                new Vector3f(0, 0, 35),
-                new Vector3f(0, 0, 0),
+                new Vector3D(0, 0, 35),
+                new Vector3D(0, 0, 0),
                 1.0F, 1, 0.01F, 80);
     }
 
@@ -154,9 +155,9 @@ public class GuiController {
         node.setOnScroll((ScrollEvent event) -> {
             double deltaY = event.getDeltaY();
             if (deltaY > 0) {
-                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+                camera.movePosition(new Vector3D(0, -TRANSLATION, 0));
             } else if (deltaY < 0) {
-                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+                camera.movePosition(new Vector3D(0, TRANSLATION, 0));
             }
         });
     }

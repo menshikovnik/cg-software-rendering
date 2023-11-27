@@ -1,7 +1,7 @@
 package com.graphics.rendering.math.vector;
 
 public class Vector4D {
-    private static final float esp = 1e-4f;
+    private static final float ESP = 1e-4f;
     private float x;
     private float y;
     private float z;
@@ -12,6 +12,20 @@ public class Vector4D {
         this.y = y;
         this.z = z;
         this.w = w;
+    }
+
+    public float get(int index) {
+        switch (index) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+            case 3:
+                return w;
+        }
+        throw new IllegalArgumentException();
     }
 
     public float getX() {
@@ -71,7 +85,7 @@ public class Vector4D {
      * Операция деления на скаляр
      */
     public Vector4D divScalar(float scalar) {
-        if (Math.abs(scalar) < esp) {
+        if (Math.abs(scalar) < ESP) {
             throw new IllegalArgumentException("Деление на ноль не допускается.");
         }
         float a = x / scalar;
@@ -99,7 +113,7 @@ public class Vector4D {
         float c = 0;
         float d = 0;
         float length = getLength();
-        if (Math.abs(length) > esp) {
+        if (Math.abs(length) > ESP) {
             a = x / length;
             b = y / length;
             c = z / length;
@@ -118,6 +132,13 @@ public class Vector4D {
         return this.x * v.getX() + this.y * v.getY() + this.z * v.getZ() + this.w * v.getW();
     }
 
+    /**
+     * Операция перевода вектора 4 в вектор 3, где w убираем
+     */
+    public Vector3D translationToVector3D() {
+        return new Vector3D(getX(), getY(), getZ());
+    }
+
     @Override
     public String toString() {
         return "Vector4D{" +
@@ -127,10 +148,9 @@ public class Vector4D {
                 ", w=" + w +
                 '}';
     }
+
     public boolean equalsAns(Vector4D vector4D) {
-        return x == vector4D.getX()
-                && y == vector4D.getY()
-                && z == vector4D.getZ()
-                && w == vector4D.getW();
+        return Math.abs(x - vector4D.x) < ESP && Math.abs(y - vector4D.y) < ESP && Math.abs(z - vector4D.z) < ESP && Math.abs(w - vector4D.w) < ESP;
     }
 }
+

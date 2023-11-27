@@ -56,14 +56,10 @@ class Matrix3DTest {
                 {1, 2, 3},
                 {4, 5, 4},
                 {7, 8, 9}};
-        float[][] vector = {
-                {30},
-                {65},
-                {120}};
         Vector3D vector3D = new Vector3D(5, 5, 5);
         Matrix3D matrix3D = new Matrix3D(matrix);
-        Matrix3D check = matrix3D.multiplyVector(vector3D);
-        Matrix3D result = new Matrix3D(vector);
+        Vector3D check = matrix3D.multiplyVector(vector3D);
+        Vector3D result = new Vector3D(30,65,120);
         Assertions.assertTrue(check.equalsAns(result));
     }
 
@@ -102,5 +98,17 @@ class Matrix3DTest {
         Matrix3D check = matrix3D.transpose();
         Matrix3D result = new Matrix3D(result1);
         Assertions.assertTrue(check.equalsAns(result));
+    }
+
+    @Test
+    void determinate() {
+        float[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 4},
+                {7, 8, 9}};
+        float result = -12;
+        Matrix3D matrix3D = new Matrix3D(matrix);
+        float check = matrix3D.determinate();
+        Assertions.assertEquals(result,check);
     }
 }
