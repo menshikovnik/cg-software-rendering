@@ -29,7 +29,7 @@ public class ObjectReader {
         while (scanner.hasNextLine()) {
             final String line = scanner.nextLine();
             ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("\\s+")));
-            if (wordsInLine.isEmpty()) {
+            if (wordsInLine.contains("")) {
                 continue;
             }
 
