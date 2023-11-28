@@ -26,6 +26,5 @@ public class Triangulation extends Polygon {
         return triangles;
     }
 
-
 }
 
