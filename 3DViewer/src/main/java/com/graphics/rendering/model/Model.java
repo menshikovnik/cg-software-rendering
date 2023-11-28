@@ -39,4 +39,24 @@ public class Model {
     public void setNormalInterpolationFactor(float normalInterpolationFactor) {
         this.normalInterpolationFactor = normalInterpolationFactor;
     }
+
+    public ArrayList<Vector3D> getVertices() {
+        return vertices;
+    }
+
+    public ArrayList<Vector2D> getTextureVertices() {
+        return textureVertices;
+    }
+
+    public ArrayList<Vector3D> getNormals() {
+        return normals;
+    }
+
+    public ArrayList<Polygon> getPolygons() {
+        return polygons;
+    }
+
+    public ArrayList<String> getNameOfMaterial() {
+        return nameOfMaterial;
+    }
 }

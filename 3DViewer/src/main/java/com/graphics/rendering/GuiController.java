@@ -93,7 +93,7 @@ public class GuiController {
 
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
 
-        if (!isFileNull(file)) {
+        if (isFileNull(file)) {
             showAlertWindow(Alert.AlertType.ERROR, "File is null", ButtonType.CLOSE);
         }
 
@@ -183,7 +183,7 @@ public class GuiController {
     }
 
     public static boolean isFileNull(File file){
-        return file != null;
+        return file == null;
     }
 
     public ListView<String> getFileName() {
