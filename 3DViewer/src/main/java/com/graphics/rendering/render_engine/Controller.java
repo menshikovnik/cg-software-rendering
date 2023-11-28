@@ -1,7 +1,7 @@
 package com.graphics.rendering.render_engine;
 
 
-import com.graphics.rendering.math.Vector3f;
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Triangle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,14 +33,14 @@ public class Controller implements Initializable {
 //        drawTriangle(ctx, 0, 200, 100, Color.RED, Color.GREEN,Color.BLUE); // сюда как то закинуть координаты точек р1 р2 р3
     }
 
-    void drawTriangle(GraphicsContext graphicsContext, Vector3f p1, Vector3f p2, Vector3f p3, Color color1, Color color2, Color color3,float[][] zBuffer) {
+    void drawTriangle(GraphicsContext graphicsContext, Vector3D p1, Vector3D p2, Vector3D p3, Color color1, Color color2, Color color3, float[][] zBuffer) {
 
         PixelWriter pixelWriter = graphicsContext.getPixelWriter();
 
-        float minX = min(p1.x, p2.x, p3.x);
-        float minY = min(p1.y, p2.y, p3.y);
-        float maxX = max(p1.x, p2.x, p3.x);
-        float maxY = max(p1.y, p2.y, p3.y);
+        float minX = min(p1.getX(), p2.getX(), p3.getX());
+        float minY = min(p1.getY(), p2.getY(), p3.getY());
+        float maxX = max(p1.getX(), p2.getX(), p3.getX());
+        float maxY = max(p1.getY(), p2.getY(), p3.getY());
 
 
 
@@ -54,8 +54,8 @@ public class Controller implements Initializable {
                     // которые используются для вычисления площадей подтреугольников,
                     // образованных вершинами треугольника и координатами пикселя.
 
-                    float alpha =  ((p2.y - p3.y) * (x - p3.x) + (p3.x - p2.x) * (y - p3.y)) / ((p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y));
-                    float beta =  ((p3.y - p1.y) * (x - p3.x) + (p1.x - p3.x) * (y - p3.y)) / ((p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y));
+                    float alpha =  ((p2.getY() - p3.getY()) * (x - p3.getX()) + (p3.getX() - p2.getX()) * (y - p3.getY())) / ((p2.getY() - p3.getY()) * (p1.getX() - p3.getX()) + (p3.getX() - p2.getX()) * (p1.getY() - p3.getY()));
+                    float beta =  ((p3.getY() - p1.getY()) * (x - p3.getX()) + (p1.getX() - p3.getX()) * (y - p3.getY())) / ((p2.getY() - p3.getY()) * (p1.getX() - p3.getX()) + (p3.getX() - p2.getX()) * (p1.getY() - p3.getY()));
                     float gamma =  1 - alpha - beta;
                     // в теории тут можно поставить if про проверку точки в треугольнике,а не в конце
 
@@ -70,7 +70,7 @@ public class Controller implements Initializable {
                         for (float yy = minY; yy <= maxY; yy++) {
 
                             if (alpha >= 0 && beta >= 0 && gamma >= 0) {
-                                float z = alpha * p1.z + beta * p2.z + gamma * p3.z;
+                                float z = alpha * p1.getZ() + beta * p2.getZ() + gamma * p3.getZ();
 
                                 // Сравнение с текущим значением Z-буфера
                                 if (z < zBuffer[(int) xx][(int) yy]) {
@@ -92,7 +92,7 @@ public class Controller implements Initializable {
     }
 
 
-    boolean isPointInTriangle(float x, float y, Vector3f p1, Vector3f p2 , Vector3f p3) {
+    boolean isPointInTriangle(float x, float y, Vector3D p1, Vector3D p2 , Vector3D p3) {
 
         float d1 = sign(x, y ,p1, p2);
         float d2 = sign(x, y, p1, p2);
@@ -103,9 +103,9 @@ public class Controller implements Initializable {
 
     }
 
-    float sign(float x, float y,Vector3f p1, Vector3f p2) {
+    float sign(float x, float y,Vector3D p1, Vector3D p2) {
 
-        return ((x - p2.x) * (p1.y - p2.y) * (p1.x - p2.x) * (y - p2.y));
+        return ((x - p2.getX()) * (p1.getY() - p2.getY()) * (p1.getX() - p2.getX()) * (y - p2.getY()));
 
     }
     //Данный код проверяет, находится ли заданная точка внутри треугольника, заданного координатами своих вершин.

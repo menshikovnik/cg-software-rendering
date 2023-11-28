@@ -1,7 +1,7 @@
 package com.graphics.rendering.math.vector;
 
 public class Vector4D {
-    private static final float esp = 1e-4f;
+    private static final float ESP = 1e-4f;
     private float x;
     private float y;
     private float z;
@@ -85,7 +85,7 @@ public class Vector4D {
      * Операция деления на скаляр
      */
     public Vector4D divScalar(float scalar) {
-        if (Math.abs(scalar) < esp) {
+        if (Math.abs(scalar) < ESP) {
             throw new IllegalArgumentException("Деление на ноль не допускается.");
         }
         float a = x / scalar;
@@ -113,7 +113,7 @@ public class Vector4D {
         float c = 0;
         float d = 0;
         float length = getLength();
-        if (Math.abs(length) > esp) {
+        if (Math.abs(length) > ESP) {
             a = x / length;
             b = y / length;
             c = z / length;
@@ -150,10 +150,7 @@ public class Vector4D {
     }
 
     public boolean equalsAns(Vector4D vector4D) {
-        double number = 10000;
-        return Math.round(x * number) / number == Math.round(vector4D.getX() * number) / number
-                && Math.round(y * number) / number == Math.round(vector4D.getY() * number) / number
-                && Math.round(z * number) / number == Math.round(vector4D.getZ() * number) / number
-                && Math.round(w * number) / number == Math.round(vector4D.getW() * number) / number;
+        return Math.abs(x - vector4D.x) < ESP && Math.abs(y - vector4D.y) < ESP && Math.abs(z - vector4D.z) < ESP && Math.abs(w - vector4D.w) < ESP;
     }
 }
+

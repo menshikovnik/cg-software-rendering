@@ -1,10 +1,10 @@
 package triangulation_test;
 
 
-import com.graphics.rendering.math.Vector3f;
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Polygon;
 import com.graphics.rendering.model.Triangle;
-import com.graphics.rendering.render_engine.Triangulation;
+import com.graphics.rendering.model.Triangulation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class TriangulationTest {
     ArrayList<Polygon> polygons = new ArrayList<>();
     ArrayList<Triangle> triangles = new ArrayList<>();
-    ArrayList<Vector3f> vertices = new ArrayList<>();
+    ArrayList<Vector3D> vertices = new ArrayList<>();
 
     @Before
     public void clear(){
@@ -29,9 +29,9 @@ public class TriangulationTest {
         Polygon polygon = new Polygon();
         polygons.add(polygon);
 
-        vertices.add(new Vector3f(100, 100,3));
-        vertices.add(new Vector3f(150, 200,3));
-        vertices.add(new Vector3f(100, 200,3));
+        vertices.add(new Vector3D(100, 100,3));
+        vertices.add(new Vector3D(150, 200,3));
+        vertices.add(new Vector3D(100, 200,3));
 
         polygon.getVertexIndices().add(0);
         polygon.getVertexIndices().add(1);
@@ -52,18 +52,18 @@ public class TriangulationTest {
         polygons.add(polygon2);
 
 
-        vertices.add(new Vector3f(200, 100,3));
-        vertices.add(new Vector3f(100, 120,3));
-        vertices.add(new Vector3f(100, 140,3));
-        vertices.add(new Vector3f(200, 200,3));
-        vertices.add(new Vector3f(300, 200,3));
-        vertices.add(new Vector3f(350, 140,3));
-        vertices.add(new Vector3f(350, 120,3));
-        vertices.add(new Vector3f(300, 100,3));
+        vertices.add(new Vector3D(200, 100,3));
+        vertices.add(new Vector3D(100, 120,3));
+        vertices.add(new Vector3D(100, 140,3));
+        vertices.add(new Vector3D(200, 200,3));
+        vertices.add(new Vector3D(300, 200,3));
+        vertices.add(new Vector3D(350, 140,3));
+        vertices.add(new Vector3D(350, 120,3));
+        vertices.add(new Vector3D(300, 100,3));
 
-        vertices.add(new Vector3f(100, 100,3));
-        vertices.add(new Vector3f(150, 200,3));
-        vertices.add(new Vector3f(100, 200,3));
+        vertices.add(new Vector3D(100, 100,3));
+        vertices.add(new Vector3D(150, 200,3));
+        vertices.add(new Vector3D(100, 200,3));
 
 
         polygon.getVertexIndices().add(0);
@@ -90,12 +90,12 @@ public class TriangulationTest {
         Polygon polygon = new Polygon();
         polygons.add(polygon);
 
-        vertices.add(new Vector3f(100, 100,3));
-        vertices.add(new Vector3f(100, 200,3));
-        vertices.add(new Vector3f(150, 250,3));
-        vertices.add(new Vector3f(200, 200,3));
-        vertices.add(new Vector3f(200, 100,3));
-        vertices.add(new Vector3f(150, 50,3));
+        vertices.add(new Vector3D(100, 100,3));
+        vertices.add(new Vector3D(100, 200,3));
+        vertices.add(new Vector3D(150, 250,3));
+        vertices.add(new Vector3D(200, 200,3));
+        vertices.add(new Vector3D(200, 100,3));
+        vertices.add(new Vector3D(150, 50,3));
 
         polygon.getVertexIndices().add(0);
         polygon.getVertexIndices().add(1);
@@ -113,4 +113,3 @@ public class TriangulationTest {
 
 
 }
-
