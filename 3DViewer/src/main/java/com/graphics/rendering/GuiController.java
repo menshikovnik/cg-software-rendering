@@ -1,6 +1,8 @@
 package com.graphics.rendering;
 
+import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
+import com.graphics.rendering.objreader.ObjReaderException;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
 import com.graphics.rendering.render_engine.RenderEngine;
@@ -13,9 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -23,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import javax.vecmath.Vector3f;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +32,7 @@ import java.util.HashMap;
 public class GuiController {
 
     final private float TRANSLATION = 0.4F;
+    private static final double FPS = 60;
     @FXML
     AnchorPane anchorPane;
 
@@ -48,8 +48,8 @@ public class GuiController {
     private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
 
     private Camera camera = new Camera(
-            new Vector3f(0, 0, 35),
-            new Vector3f(0, 0, 0),
+            new Vector3D(0, 0, 35),
+            new Vector3D(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
     @FXML
@@ -61,7 +61,7 @@ public class GuiController {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
-        KeyFrame frame = new KeyFrame(Duration.millis(60), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(1000 / FPS), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -93,20 +93,21 @@ public class GuiController {
 
         File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
 
-        if (file == null) {
-            return;
-        } //todo сделать окно предупреждения
-
-        this.tempFileName.add(file.getName());
-        this.fileName.setItems(tempFileName);
+        if (isFileNull(file)) {
+            showAlertWindow(Alert.AlertType.ERROR, "File is null", ButtonType.CLOSE);
+        }
 
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
             String fileContent = Files.readString(fileName);
             meshes.put(file.getName(), ObjectReader.read(fileContent));
+            this.tempFileName.add(file.getName());
+            this.fileName.setItems(tempFileName);
         } catch (IOException exception) {
-            // todo: доделать окно ошибки
+            showAlertWindow(Alert.AlertType.ERROR, exception.getMessage(), ButtonType.CLOSE);
+        } catch (ObjReaderException exception) {
+            showAlertWindow(Alert.AlertType.WARNING, exception.getMessage(), ButtonType.CLOSE);
         }
     }
 
@@ -114,6 +115,7 @@ public class GuiController {
     public void clearScene() {
         meshes = new HashMap<>();
         fileName.setItems(null);
+        tempFileName.clear();
     }
 
     @FXML
@@ -123,29 +125,29 @@ public class GuiController {
 
     @FXML
     public void handleCameraForward() {
-        camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+        camera.movePosition(new Vector3D(0, 0, -TRANSLATION));
     }
 
     @FXML
     public void handleCameraBackward() {
-        camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+        camera.movePosition(new Vector3D(0, 0, TRANSLATION));
     }
 
     @FXML
     public void handleCameraLeft() {
-        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3D(TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraRight() {
-        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3D(-TRANSLATION, 0, 0));
     }
 
     @FXML
     public void backToZeroCoordinates() {
         camera = new Camera(
-                new Vector3f(0, 0, 35),
-                new Vector3f(0, 0, 0),
+                new Vector3D(0, 0, 35),
+                new Vector3D(0, 0, 0),
                 1.0F, 1, 0.01F, 80);
     }
 
@@ -153,9 +155,9 @@ public class GuiController {
         node.setOnScroll((ScrollEvent event) -> {
             double deltaY = event.getDeltaY();
             if (deltaY > 0) {
-                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+                camera.movePosition(new Vector3D(0, -TRANSLATION, 0));
             } else if (deltaY < 0) {
-                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+                camera.movePosition(new Vector3D(0, TRANSLATION, 0));
             }
         });
     }
@@ -173,6 +175,15 @@ public class GuiController {
         contextMenu.getItems().add(deleteItem);
         double yOffset = 10.5; //для смещения элемента контекстного меню вниз
         contextMenu.show(fileName, event.getScreenX(), event.getScreenY() + yOffset);
+    }
+
+    public static void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType){
+        Alert alert = new Alert(alertType, message, buttonType);
+        alert.showAndWait();
+    }
+
+    public static boolean isFileNull(File file){
+        return file == null;
     }
 
     public ListView<String> getFileName() {
