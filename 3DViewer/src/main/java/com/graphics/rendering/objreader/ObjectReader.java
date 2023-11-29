@@ -31,10 +31,15 @@ public class ObjectReader {
             final String line = scanner.nextLine();
             ArrayList<String> wordsInLine = new ArrayList<>(Arrays.asList(line.split("\\s+")));
             if (wordsInLine.contains("")) {
+                lineInd++;
                 continue;
             }
 
             final String token = wordsInLine.get(0);
+            if (token.equals(COMMENT_TOKEN)){
+                lineInd++;
+                continue;
+            }
             wordsInLine.remove(0);
 
             lineInd++;
@@ -48,11 +53,7 @@ public class ObjectReader {
                 case NAME_OF_MODEL_TOKEN -> result.setNameOfModel(parseNameOfModel(wordsInLine, lineInd));
                 case SMOOTHING_FACTOR_TOKEN ->
                         result.setNormalInterpolationFactor(parseNormalInterpolationFactor(wordsInLine, lineInd));
-                default -> {
-                    if (!token.equals(COMMENT_TOKEN)) {
-                        throw new ObjReaderException("Token set incorrectly.", lineInd);
-                    }
-                }
+                default -> throw new ObjReaderException("Token set incorrectly.", lineInd);
             }
         }
         return result;
