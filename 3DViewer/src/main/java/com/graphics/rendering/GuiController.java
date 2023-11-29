@@ -28,10 +28,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GuiController {
-
     final private float TRANSLATION = 0.4F;
+
     private static final double FPS = 60;
     @FXML
     AnchorPane anchorPane;
@@ -40,12 +41,22 @@ public class GuiController {
     private Canvas canvas;
 
     private HashMap<String, Model> meshes = new HashMap<>();
+
     private ContextMenu contextMenu;
 
 
     @FXML
     private ListView<String> fileName;
+
     private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
+
+    @FXML
+    private Button buttonMode;
+
+    @FXML
+    private Menu fileMenu;
+
+    private boolean isLightMode = true;
 
     private Camera camera = new Camera(
             new Vector3D(0, 0, 35),
@@ -190,7 +201,28 @@ public class GuiController {
         return fileName;
     }
 
-    public void setFileName(ListView<String> fileName) {
-        this.fileName = fileName;
+    @FXML
+    public void changeTheme(){
+        isLightMode = !isLightMode;
+
+        if (isLightMode){
+            setLightMode();
+        } else {
+            setDarkMode();
+        }
+    }
+
+    private void setLightMode(){
+        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css").toString()));
+        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css").toString()));
+        fileMenu.getStyleClass().clear();
+        fileMenu.getStyleClass().add("menu");
+    }
+
+    private void setDarkMode() {
+        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css").toString()));
+        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css").toString()));
+        fileMenu.getStyleClass().clear();
+        fileMenu.getStyleClass().add("menu");
     }
 }
