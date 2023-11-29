@@ -14,7 +14,7 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="900.0" prefWidth="1120.0" styleClass="primary-color" stylesheets="@../../../../styles/lightMode.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graphics.rendering.GuiController">
+<AnchorPane fx:id="anchorPane" prefHeight="900.0" prefWidth="1120.0" styleClass="primary-color" stylesheets="@../../../../styles/darkMode.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graphics.rendering.GuiController">
     <MenuBar prefHeight="26.0" prefWidth="161.0" styleClass="secondary-color">
         <Menu fx:id="fileMenu" mnemonicParsing="false" text="File" styleClass="menu">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load Model" styleClass="menu-item">

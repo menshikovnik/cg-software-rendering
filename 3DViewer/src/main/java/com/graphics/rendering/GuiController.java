@@ -56,7 +56,7 @@ public class GuiController {
     @FXML
     private Menu fileMenu;
 
-    private boolean isLightMode = true;
+    private boolean isLightMode = false;
 
     private Camera camera = new Camera(
             new Vector3D(0, 0, 35),
