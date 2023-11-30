@@ -58,7 +58,7 @@
     <Canvas fx:id="canvas" height="870" styleClass="primary-color" width="1443.0" AnchorPane.topAnchor="30.0"/>
 
     <Accordion layoutX="1238.0" layoutY="28.0"/>
-    <Button fx:id="buttonMode" layoutX="1389.0" layoutY="3.0" minWidth="45.0" mnemonicParsing="false"
+    <Button layoutX="1389.0" layoutY="3.0" minWidth="45.0" mnemonicParsing="false"
             onAction="#changeTheme" prefHeight="50.0" prefWidth="45.0">
         <graphic>
             <ImageView fx:id="image" fitHeight="42.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">

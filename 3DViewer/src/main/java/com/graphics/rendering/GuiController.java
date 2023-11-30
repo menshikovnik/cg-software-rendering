@@ -4,6 +4,7 @@ import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.objreader.ObjReaderException;
 import com.graphics.rendering.objreader.ObjectReader;
+import com.graphics.rendering.objwriter.ObjectWriter;
 import com.graphics.rendering.render_engine.Camera;
 import com.graphics.rendering.render_engine.RenderEngine;
 import javafx.animation.Animation;
@@ -16,8 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -94,6 +93,7 @@ public class GuiController {
             if (event.getButton() == MouseButton.SECONDARY) {
                 contextMenu.getItems().clear();
                 removeModelFromTheScene(event);
+                saveModelAs(event);
             }
         });
 
@@ -188,19 +188,42 @@ public class GuiController {
             meshes.remove(selectedItem);
         });
 
+        if (!isLightMode) {
+            deleteItem.setStyle("-fx-text-fill: white;");
+        }
+
         contextMenu.getItems().add(deleteItem);
         double yOffset = 10.5; //для смещения элемента контекстного меню вниз
         contextMenu.show(fileName, event.getScreenX(), event.getScreenY() + yOffset);
     }
 
-    private void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType){
+    private void saveModelAs(MouseEvent event) {
+        MenuItem saveItemAs = new MenuItem();
+        saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", fileName.getSelectionModel().selectedItemProperty()));
+
+        saveItemAs.setOnAction(saveAsEvent -> {
+            String selectedItem = fileName.getSelectionModel().getSelectedItem();
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+            File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
+            ObjectWriter.write(file.getAbsolutePath(), meshes.get(selectedItem));
+        });
+        if (!isLightMode) {
+            saveItemAs.setStyle("-fx-text-fill: white;");
+        }
+
+        contextMenu.getItems().add(saveItemAs);
+        contextMenu.show(fileName, event.getScreenX(), event.getScreenY());
+    }
+
+    private void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType) {
         Stage mainStage = (Stage) anchorPane.getScene().getWindow();
         Alert alert = new Alert(alertType, message, buttonType);
         alert.initOwner(mainStage);
         alert.showAndWait();
     }
 
-    public static boolean isFileNull(File file){
+    public static boolean isFileNull(File file) {
         return file == null;
     }
 
@@ -209,17 +232,17 @@ public class GuiController {
     }
 
     @FXML
-    private void changeTheme(){
+    private void changeTheme() {
         isLightMode = !isLightMode;
 
-        if (isLightMode){
+        if (isLightMode) {
             setLightMode();
         } else {
             setDarkMode();
         }
     }
 
-    private void setLightMode(){
+    private void setLightMode() {
         anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
         anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-moon-96.png")).toString());
