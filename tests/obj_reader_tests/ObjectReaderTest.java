@@ -2,7 +2,6 @@ package obj_reader_tests;
 
 import com.graphics.rendering.math.vector.Vector2D;
 import com.graphics.rendering.math.vector.Vector3D;
-import com.graphics.rendering.model.Polygon;
 import com.graphics.rendering.objreader.ObjReaderException;
 import com.graphics.rendering.objreader.ObjectReader;
 import org.junit.jupiter.api.Assertions;

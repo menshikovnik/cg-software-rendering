@@ -1,5 +1,6 @@
 .primary-color{
     -fx-background-color: #383838;
+    -fx-text-fill: white;
 }
 
 .secondary-color{
@@ -17,6 +18,7 @@
 
 .menu-item{
     -fx-background-color: #383838;
+    -fx-text-fill: white;
 }
 
 .menu-item:hover {
@@ -89,4 +91,9 @@
 .list-view .list-cell:odd {
     -fx-background-color: #282828;
     -fx-text-fill: white;
+}
+
+.list-view .list-cell:hover{
+    -fx-background-color: #28b1de;
+    -fx-background-insets: 0, 1, 2;
 }

@@ -36,7 +36,7 @@ public class ObjectReader {
             }
 
             final String token = wordsInLine.get(0);
-            if (token.equals(COMMENT_TOKEN)){
+            if (token.equals(COMMENT_TOKEN)) {
                 lineInd++;
                 continue;
             }
@@ -79,12 +79,14 @@ public class ObjectReader {
     }
 
     protected static String parseMaterialTextureLib(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
-        if (wordsInLineWithoutToken.size() > 1 || wordsInLineWithoutToken.get(0).isEmpty() || wordsInLineWithoutToken.contains(" ")) {
+        if (wordsInLineWithoutToken.get(0).isEmpty()) {
             throw new ObjReaderException("The material texture format is set incorrectly.", lineInd);
         }
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append(wordsInLineWithoutToken.get(0));
+            for (String string : wordsInLineWithoutToken) {
+                sb.append(string);
+            }
         } catch (RuntimeException e) {
             throw new ObjReaderException("The material texture format is set incorrectly.", lineInd);
         }
@@ -222,7 +224,7 @@ public class ObjectReader {
         return true;
     }
 
-    private static boolean isIndexOutOfBoundInFace(int index, int size){
+    private static boolean isIndexOutOfBoundInFace(int index, int size) {
         return index - 1 >= size;
     }
 
@@ -230,7 +232,10 @@ public class ObjectReader {
                                              int lineInd) {
         if (wordsInLineWithoutToken.size() > 1) {
             throw new ObjReaderException("Incorrect name of model", lineInd);
-        } else return wordsInLineWithoutToken.get(0);
+        } else if (!wordsInLineWithoutToken.isEmpty()) {
+            return wordsInLineWithoutToken.get(0);
+        }
+        return " ";
     }
 
     public static float parseNormalInterpolationFactor(
@@ -238,6 +243,9 @@ public class ObjectReader {
             int lineInd) {
         if (wordsInLineWithoutToken.size() > 1) {
             throw new ObjReaderException("Incorrect normal interpolation factor", lineInd);
-        } else return Float.parseFloat(wordsInLineWithoutToken.get(0));
+        } else if (!wordsInLineWithoutToken.get(0).equals("off")) {
+            return Float.parseFloat(wordsInLineWithoutToken.get(0));
+        }
+        return 0.0f;
     }
 }

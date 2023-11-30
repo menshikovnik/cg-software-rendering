@@ -65,3 +65,8 @@
 .titled-pane > *.content {
     -fx-border-color: transparent;
 }
+
+.list-view .list-cell:hover{
+    -fx-background-color: #28b1de;
+    -fx-background-insets: 0, 1, 2;
+}

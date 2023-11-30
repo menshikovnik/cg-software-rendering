@@ -16,11 +16,16 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -31,11 +36,11 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class GuiController {
-    final private float TRANSLATION = 0.4F;
+    private final float TRANSLATION = 0.4F;
 
     private static final double FPS = 60;
     @FXML
-    AnchorPane anchorPane;
+    private AnchorPane anchorPane;
 
     @FXML
     private Canvas canvas;
@@ -51,10 +56,10 @@ public class GuiController {
     private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
 
     @FXML
-    private Button buttonMode;
+    private Menu fileMenu;
 
     @FXML
-    private Menu fileMenu;
+    private ImageView image;
 
     private boolean isLightMode = false;
 
@@ -123,39 +128,39 @@ public class GuiController {
     }
 
     @FXML
-    public void clearScene() {
+    private void clearScene() {
         meshes = new HashMap<>();
         fileName.setItems(null);
         tempFileName.clear();
     }
 
     @FXML
-    public void chooseModelOnClick() {
+    private void chooseModelOnClick() {
         //todo сделать выбор модели по клику
     }
 
     @FXML
-    public void handleCameraForward() {
+    private void handleCameraForward() {
         camera.movePosition(new Vector3D(0, 0, -TRANSLATION));
     }
 
     @FXML
-    public void handleCameraBackward() {
+    private void handleCameraBackward() {
         camera.movePosition(new Vector3D(0, 0, TRANSLATION));
     }
 
     @FXML
-    public void handleCameraLeft() {
+    private void handleCameraLeft() {
         camera.movePosition(new Vector3D(TRANSLATION, 0, 0));
     }
 
     @FXML
-    public void handleCameraRight() {
+    private void handleCameraRight() {
         camera.movePosition(new Vector3D(-TRANSLATION, 0, 0));
     }
 
     @FXML
-    public void backToZeroCoordinates() {
+    private void backToZeroCoordinates() {
         camera = new Camera(
                 new Vector3D(0, 0, 35),
                 new Vector3D(0, 0, 0),
@@ -188,8 +193,10 @@ public class GuiController {
         contextMenu.show(fileName, event.getScreenX(), event.getScreenY() + yOffset);
     }
 
-    public static void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType){
+    private void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType){
+        Stage mainStage = (Stage) anchorPane.getScene().getWindow();
         Alert alert = new Alert(alertType, message, buttonType);
+        alert.initOwner(mainStage);
         alert.showAndWait();
     }
 
@@ -202,7 +209,7 @@ public class GuiController {
     }
 
     @FXML
-    public void changeTheme(){
+    private void changeTheme(){
         isLightMode = !isLightMode;
 
         if (isLightMode){
@@ -213,15 +220,19 @@ public class GuiController {
     }
 
     private void setLightMode(){
-        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css").toString()));
-        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css").toString()));
+        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
+        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-moon-96.png")).toString());
+        this.image.setImage(image);
         fileMenu.getStyleClass().clear();
         fileMenu.getStyleClass().add("menu");
     }
 
     private void setDarkMode() {
-        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css").toString()));
-        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css").toString()));
+        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
+        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-sun-90.png")).toString());
+        this.image.setImage(image);
         fileMenu.getStyleClass().clear();
         fileMenu.getStyleClass().add("menu");
     }
