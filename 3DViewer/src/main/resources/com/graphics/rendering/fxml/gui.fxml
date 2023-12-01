@@ -76,7 +76,7 @@
     </Button>
     <TitledPane animated="false" layoutX="1238.0" layoutY="52.0" styleClass="titled-pane" text="Models">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="primary-color">
-            <ListView fx:id="fileName" layoutX="-2.0" prefHeight="182.0" prefWidth="210.0" styleClass="primary-color"/>
+            <ListView fx:id="modelNameView" layoutX="-2.0" prefHeight="182.0" prefWidth="210.0" styleClass="primary-color"/>
         </AnchorPane>
     </TitledPane>
 </AnchorPane>

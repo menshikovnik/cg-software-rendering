@@ -35,30 +35,34 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class GuiController {
-    private final float TRANSLATION = 0.4F;
-
-    private static final double FPS = 60;
     @FXML
     private AnchorPane anchorPane;
 
     @FXML
     private Canvas canvas;
 
-    private HashMap<String, Model> meshes = new HashMap<>();
-
-    private ContextMenu contextMenu;
-
-
-    @FXML
-    private ListView<String> fileName;
-
-    private final ObservableList<String> tempFileName = FXCollections.observableArrayList();
-
     @FXML
     private Menu fileMenu;
 
     @FXML
     private ImageView image;
+
+    @FXML
+    private ListView<String> modelNameView;
+
+    private final float TRANSLATION = 0.4F;
+
+    private static final double FPS = 60;
+
+    private HashMap<String, Model> meshes = new HashMap<>();
+
+    private HashMap<String, String> filePaths = new HashMap<>();
+
+    private HashMap<String, Integer> countNameOfModels = new HashMap<>();
+
+    private ContextMenu contextMenu;
+
+    private final ObservableList<String> fileNames = FXCollections.observableArrayList();
 
     private boolean isLightMode = false;
 
@@ -89,11 +93,13 @@ public class GuiController {
             }
         });
 
-        fileName.setOnMouseClicked(event -> {
+        modelNameView.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 contextMenu.getItems().clear();
                 removeModelFromTheScene(event);
                 saveModelAs(event);
+                saveInCurrentFile(event);
+                copyModel(event);
             }
         });
 
@@ -113,13 +119,10 @@ public class GuiController {
             showAlertWindow(Alert.AlertType.ERROR, "File is null", ButtonType.CLOSE);
         }
 
-        Path fileName = Path.of(file.getAbsolutePath());
-
         try {
-            String fileContent = Files.readString(fileName);
-            meshes.put(file.getName(), ObjectReader.read(fileContent));
-            this.tempFileName.add(file.getName());
-            this.fileName.setItems(tempFileName);
+
+            readFile(file);
+
         } catch (IOException exception) {
             showAlertWindow(Alert.AlertType.ERROR, exception.getMessage(), ButtonType.CLOSE);
         } catch (ObjReaderException exception) {
@@ -130,8 +133,10 @@ public class GuiController {
     @FXML
     private void clearScene() {
         meshes = new HashMap<>();
-        fileName.setItems(null);
-        tempFileName.clear();
+        modelNameView.setItems(null);
+        fileNames.clear();
+        filePaths = new HashMap<>();
+        countNameOfModels = new HashMap<>();
     }
 
     @FXML
@@ -180,12 +185,16 @@ public class GuiController {
 
     private void removeModelFromTheScene(MouseEvent event) {
         MenuItem deleteItem = new MenuItem();
-        deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", fileName.getSelectionModel().selectedItemProperty()));
+        deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", modelNameView.getSelectionModel().selectedItemProperty()));
 
         deleteItem.setOnAction(deleteEvent -> {
-            String selectedItem = fileName.getSelectionModel().getSelectedItem();
-            fileName.getItems().remove(selectedItem);
+            String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
+            String parseItem = parseNameOfModel(selectedItem);
+            countNameOfModels.put(parseItem, countNameOfModels.get(parseItem) - 1);
             meshes.remove(selectedItem);
+            filePaths.remove(selectedItem);
+            fileNames.remove(selectedItem);
+            modelNameView.getItems().remove(selectedItem);
         });
 
         if (!isLightMode) {
@@ -194,26 +203,65 @@ public class GuiController {
 
         contextMenu.getItems().add(deleteItem);
         double yOffset = 10.5; //для смещения элемента контекстного меню вниз
-        contextMenu.show(fileName, event.getScreenX(), event.getScreenY() + yOffset);
+        contextMenu.show(modelNameView, event.getScreenX(), event.getScreenY() + yOffset);
     }
 
     private void saveModelAs(MouseEvent event) {
         MenuItem saveItemAs = new MenuItem();
-        saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", fileName.getSelectionModel().selectedItemProperty()));
+        saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", modelNameView.getSelectionModel().selectedItemProperty()));
 
         saveItemAs.setOnAction(saveAsEvent -> {
-            String selectedItem = fileName.getSelectionModel().getSelectedItem();
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-            File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
-            ObjectWriter.write(file.getAbsolutePath(), meshes.get(selectedItem));
+            String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
+            saveAs(selectedItem);
         });
         if (!isLightMode) {
             saveItemAs.setStyle("-fx-text-fill: white;");
         }
 
         contextMenu.getItems().add(saveItemAs);
-        contextMenu.show(fileName, event.getScreenX(), event.getScreenY());
+        contextMenu.show(modelNameView, event.getScreenX(), event.getScreenY());
+    }
+
+    private void saveInCurrentFile(MouseEvent event) {
+        MenuItem save = new MenuItem();
+        save.textProperty().bind(Bindings.format("Save \"%s\"", modelNameView.getSelectionModel().selectedItemProperty()));
+
+        save.setOnAction(saveEvent -> {
+            String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
+            if (filePaths.containsKey(selectedItem)) {
+                ObjectWriter.write(filePaths.get(selectedItem), meshes.get(selectedItem));
+                showAlertWindow(Alert.AlertType.INFORMATION, "Model updated successfully!", ButtonType.OK);
+            } else
+                showAlertWindow(Alert.AlertType.ERROR, "Error writing OBJ file: No such file exists, do you want to save the file somewhere else?", ButtonType.CANCEL, ButtonType.OK, selectedItem);
+        });
+
+        if (!isLightMode) {
+            save.setStyle("-fx-text-fill: white;");
+        }
+
+        contextMenu.getItems().add(save);
+        contextMenu.show(modelNameView, event.getScreenX(), event.getScreenY());
+    }
+
+    private void copyModel(MouseEvent event) {
+        MenuItem copy = new MenuItem();
+        copy.textProperty().bind(Bindings.format("Copy \"%s\"", modelNameView.getSelectionModel().selectedItemProperty()));
+
+        copy.setOnAction(copyEvent -> {
+            String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
+            String item = parseNameOfModel(selectedItem);
+            addInCountNameOfModels(item);
+            meshes.put(setNameOfModel(item), meshes.get(selectedItem));
+            fileNames.add(setNameOfModel(item));
+            modelNameView.setItems(fileNames);
+        });
+
+        if (!isLightMode) {
+            copy.setStyle("-fx-text-fill: white;");
+        }
+
+        contextMenu.getItems().add(copy);
+        contextMenu.show(modelNameView, event.getScreenX(), event.getScreenY());
     }
 
     private void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType) {
@@ -223,12 +271,19 @@ public class GuiController {
         alert.showAndWait();
     }
 
-    public static boolean isFileNull(File file) {
-        return file == null;
+    private void showAlertWindow(Alert.AlertType alertType, String message, ButtonType buttonType, ButtonType buttonType1, String selectedItem) {
+        Stage mainStage = (Stage) anchorPane.getScene().getWindow();
+        Alert alert = new Alert(alertType, message, buttonType, buttonType1);
+        alert.initOwner(mainStage);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == buttonType1) {
+                saveAs(selectedItem);
+            }
+        });
     }
 
-    public ListView<String> getFileName() {
-        return fileName;
+    public static boolean isFileNull(File file) {
+        return file == null;
     }
 
     @FXML
@@ -258,5 +313,53 @@ public class GuiController {
         this.image.setImage(image);
         fileMenu.getStyleClass().clear();
         fileMenu.getStyleClass().add("menu");
+    }
+
+    private void saveAs(String selectedItem) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save model as");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        File file = fileChooser.showSaveDialog(canvas.getScene().getWindow());
+        ObjectWriter.write(file.getAbsolutePath(), meshes.get(selectedItem));
+    }
+
+    private String parseNameOfModel(String filePath) {
+        File file = new File(filePath);
+
+        // Получаем имя файла (с расширением)
+        String fileNameWithExtension = file.getName();
+
+        // Получаем имя файла без расширения
+        return fileNameWithExtension.replaceFirst("[.][^.]+$", "");
+    }
+
+    private String setNameOfModel(String nameOfModel){
+        return nameOfModel + ".00" + countNameOfModels.get(nameOfModel);
+    }
+
+    private void readFile(File file) throws IOException {
+        Path fileName = Path.of(file.getAbsolutePath());
+        String fileContent = Files.readString(fileName);
+        String nameOfModel = parseNameOfModel(file.getAbsolutePath());
+
+        addInCountNameOfModels(nameOfModel);
+
+        if (!meshes.containsKey(nameOfModel)) {
+            meshes.put(setNameOfModel(nameOfModel), ObjectReader.read(fileContent));
+            filePaths.put(setNameOfModel(nameOfModel), file.getAbsolutePath());
+            this.fileNames.add(setNameOfModel(nameOfModel));
+            this.modelNameView.setItems(fileNames);
+        } else {
+            meshes.put(setNameOfModel(nameOfModel), ObjectReader.read(fileContent));
+            filePaths.put(setNameOfModel(nameOfModel), file.getAbsolutePath());
+            this.fileNames.add(setNameOfModel(nameOfModel));
+            this.modelNameView.setItems(fileNames);
+        }
+    }
+
+    private void addInCountNameOfModels(String item){
+        if (!countNameOfModels.containsKey(item)){
+            countNameOfModels.put(item, 1);
+        } else countNameOfModels.put(item, countNameOfModels.get(item) + 1);
     }
 }
