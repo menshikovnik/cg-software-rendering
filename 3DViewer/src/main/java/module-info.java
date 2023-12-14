@@ -9,5 +9,7 @@ module com.cgvsu {
     exports com.graphics.rendering;
     exports com.graphics.rendering.math.matrix;
     exports com.graphics.rendering.math.vector;
+    exports com.graphics.rendering.models_operations;
+    exports com.graphics.rendering.model;
 
 }

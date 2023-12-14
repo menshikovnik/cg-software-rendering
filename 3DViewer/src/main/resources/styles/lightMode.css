@@ -10,6 +10,10 @@
     -fx-background-radius: 100;
 }
 
+.button-with-rounded-corners {
+    -fx-background-radius: 10;
+}
+
 .menu .label
 {
     -fx-text-fill: black;

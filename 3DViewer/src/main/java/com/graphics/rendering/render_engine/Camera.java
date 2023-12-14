@@ -5,7 +5,6 @@ import com.graphics.rendering.math.vector.Vector3D;
 
 
 public class Camera {
-    // todo: Изменить на свой матан
     private Vector3D position;
     private Vector3D target;
     private final float fov;
