@@ -15,6 +15,30 @@ public class Model {
     private String materialTemplateLib;
     private String nameOfModel;
 
+    public static void moveModelLeft(Model model){
+        for (int i = 0;i < model.vertices.size();i++){
+            model.getVertices().get(i).sumVector1(new Vector3D(0.4f, 0, 0));
+        }
+    }
+
+    public static void moveModelRight(Model model){
+        for (int i = 0;i < model.vertices.size();i++){
+            model.getVertices().get(i).sumVector1(new Vector3D(-0.4f, 0, 0));
+        }
+    }
+
+    public static void moveModelForward(Model model){
+        for (int i = 0;i < model.vertices.size();i++){
+            model.getVertices().get(i).sumVector1(new Vector3D(0, 0, -0.4f));
+        }
+    }
+
+    public static void moveModelBackward(Model model){
+        for (int i = 0;i < model.vertices.size();i++){
+            model.getVertices().get(i).sumVector1(new Vector3D(0, 0, 0.4f));
+        }
+    }
+
 
     public String getNameOfModel() {
         return nameOfModel;

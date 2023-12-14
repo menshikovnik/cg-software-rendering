@@ -6,14 +6,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import java.lang.String?>
+<?import java.lang.*?>
 <AnchorPane fx:id="anchorPane" prefHeight="900.0" prefWidth="1120.0" styleClass="primary-color"
-            stylesheets="@../../../../styles/darkMode.css" xmlns="http://javafx.com/javafx/17.0.0.1"
+            stylesheets="@../../../../styles/darkMode.css" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graphics.rendering.GuiController">
     <MenuBar prefHeight="26.0" prefWidth="161.0" styleClass="secondary-color">
-        <Menu fx:id="fileMenu" mnemonicParsing="false" text="File" styleClass="menu">
-            <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load Model"
-                      styleClass="menu-item">
+        <Menu fx:id="fileMenu" mnemonicParsing="false" styleClass="menu" text="File">
+            <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" styleClass="menu-item"
+                      text="Load Model">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                 </accelerator>
@@ -58,8 +58,8 @@
     <Canvas fx:id="canvas" height="870" styleClass="primary-color" width="1443.0" AnchorPane.topAnchor="30.0"/>
 
     <Accordion layoutX="1238.0" layoutY="28.0"/>
-    <Button layoutX="1389.0" layoutY="3.0" minWidth="45.0" mnemonicParsing="false"
-            onAction="#changeTheme" prefHeight="50.0" prefWidth="45.0">
+    <Button layoutX="1389.0" layoutY="3.0" minWidth="45.0" mnemonicParsing="false" onAction="#changeTheme"
+            prefHeight="50.0" prefWidth="45.0">
         <graphic>
             <ImageView fx:id="image" fitHeight="42.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                 <Image url="@../../../../photo/icons8-sun-90.png"/>
@@ -76,7 +76,20 @@
     </Button>
     <TitledPane animated="false" layoutX="1238.0" layoutY="52.0" styleClass="titled-pane" text="Models">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="primary-color">
-            <ListView fx:id="modelNameView" layoutX="-2.0" prefHeight="182.0" prefWidth="210.0" styleClass="primary-color"/>
+            <ListView fx:id="modelNameView" layoutX="-2.0" prefHeight="182.0" prefWidth="210.0"
+                      styleClass="primary-color"/>
         </AnchorPane>
     </TitledPane>
+    <Button fx:id="buttonMove" onAction="#toggleMode" layoutY="157.0" minWidth="40.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="54.0">
+        <graphic>
+            <ImageView fx:id="buttonMoveImage" fitHeight="34.0" fitWidth="38.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@../../../../photo/icons8-move-white-50.png"/>
+            </ImageView>
+        </graphic>
+        <styleClass>
+            <String fx:value="button-move"/>
+            <String fx:value="button-with-rounded-corners"/>
+        </styleClass>
+    </Button>
 </AnchorPane>
