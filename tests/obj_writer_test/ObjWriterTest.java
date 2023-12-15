@@ -23,7 +23,7 @@ class ObjWriterTest {
     @Test
     void write() throws IOException {
         Model model = createSampleModel();
-        String fileName = "model_norm.obj";
+        String fileName = "/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/tests/obj_writer_test/model_norm.obj";
         ObjectWriter.write(fileName, model);
         Path path = Path.of(fileName);
         String fileContent = Files.readString(path);
@@ -92,7 +92,7 @@ class ObjWriterTest {
 
         model.getPolygons().add(polygon);
 
-        String fileName = "model_without_texture_normals.obj";
+        String fileName = "/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/tests/obj_writer_test/model-without-textureAndNormals.obj/";
         ObjectWriter.write(fileName, model);
         Path path = Path.of(fileName);
         String fileContent = Files.readString(path);
@@ -127,7 +127,7 @@ class ObjWriterTest {
         polygon.setTextureVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2)));
         model.getPolygons().add(polygon);
 
-        String fileName = "model_with_texture_without_normals.obj";
+        String fileName = "/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/tests/obj_writer_test/model_with_texture_without_normals.obj";
 
         ObjectWriter.write(fileName, model);
 
@@ -171,7 +171,7 @@ class ObjWriterTest {
 
         model.getPolygons().add(polygon);
 
-        String fileName = "model_without_texture_with_normals.obj";
+        String fileName = "/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/tests/obj_writer_test/model_without_texture_with_normals.obj";
         ObjectWriter.write(fileName, model);
         Path path = Path.of(fileName);
         String fileContent = Files.readString(path);
