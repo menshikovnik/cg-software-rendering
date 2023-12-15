@@ -44,12 +44,12 @@ public class ObjectReader {
 
             lineInd++;
             switch (token) {
-                case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVertex(wordsInLine, lineInd));
-                case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseTextureVertex(wordsInLine, lineInd));
-                case OBJ_NORMAL_TOKEN -> result.normals.add(parseNormal(wordsInLine, lineInd));
-                case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
+                case OBJ_VERTEX_TOKEN -> result.getVertices().add(parseVertex(wordsInLine, lineInd));
+                case OBJ_TEXTURE_TOKEN -> result.getTextureVertices().add(parseTextureVertex(wordsInLine, lineInd));
+                case OBJ_NORMAL_TOKEN -> result.getNormals().add(parseNormal(wordsInLine, lineInd));
+                case OBJ_FACE_TOKEN -> result.getPolygons().add(parseFace(wordsInLine, lineInd));
                 case OBJ_MTL_TOKEN -> result.setMaterialTemplateLib(parseMaterialTextureLib(wordsInLine, lineInd));
-                case USE_MTL_TOKEN -> result.nameOfMaterial.add(parseMaterialTextureLib(wordsInLine, lineInd));
+                case USE_MTL_TOKEN -> result.getNameOfMaterial().add(parseMaterialTextureLib(wordsInLine, lineInd));
                 case NAME_OF_MODEL_TOKEN -> result.setNameOfModel(parseNameOfModel(wordsInLine, lineInd));
                 case SMOOTHING_FACTOR_TOKEN ->
                         result.setNormalInterpolationFactor(parseNormalInterpolationFactor(wordsInLine, lineInd));

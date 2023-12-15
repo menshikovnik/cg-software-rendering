@@ -14,10 +14,10 @@ import java.util.Locale;
 public class ObjectWriter {
     public static void write(String fileName, Model model) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false))) {
-            writeVertices(writer, model.vertices);
-            writeTextureVertices(writer, model.textureVertices);
-            writeNormals(writer, model.normals);
-            writePolygons(writer, model.polygons);
+            writeVertices(writer, model.getVertices());
+            writeTextureVertices(writer, model.getTextureVertices());
+            writeNormals(writer, model.getNormals());
+            writePolygons(writer, model.getPolygons());
         } catch (IOException e) {
             throw new ObjWriterException(e.getMessage());
         }

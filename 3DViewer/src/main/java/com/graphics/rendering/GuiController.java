@@ -68,7 +68,7 @@ public class GuiController {
     private boolean isLightMode = false;
     private boolean isMoveModeEnabled = false;
 
-    private final LinkedList<String> activeModels = new LinkedList<>();
+    private LinkedList<String> activeModels = new LinkedList<>();
 
     private Camera camera = new Camera(
             new Vector3D(0, 0, 35),
@@ -105,18 +105,19 @@ public class GuiController {
                 modelOperations.saveInCurrentFile(event);
                 modelOperations.copyModel(event);
             } else if (event.getButton() == MouseButton.PRIMARY) {
-                modelNameView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-                if (!activeModels.contains(modelNameView.getSelectionModel().getSelectedItem())) {
-                    activeModels.add(modelNameView.getSelectionModel().getSelectedItem());
-                    modelNameView.getStyleClass().add("selected-item-now");
-                    modelNameView.getStyleClass().remove("cancel-choose-selected-item");
-                    System.out.println(modelNameView.getStyleClass());
+                String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
+                String resultItem = selectedItem.replaceAll("\\s.*", "");
+                if (!activeModels.contains(resultItem)) {
+                    activeModels.add(resultItem);
+                    int index = modelNameView.getSelectionModel().getSelectedIndex();
+                    String selectedItemActive = resultItem + "    ACTIVE NOW";
+                    modelNameView.getItems().remove(modelNameView.getSelectionModel().getSelectedItem());
+                    modelNameView.getItems().add(index, selectedItemActive);
                 } else {
-                    activeModels.remove(modelNameView.getSelectionModel().getSelectedItem());
-                    modelNameView.getStyleClass().add("cancel-choose-selected-item");
-                    modelNameView.getStyleClass().remove("selected-item-now");
-                    System.out.println(modelNameView.getStyleClass());
+                    int index = modelNameView.getSelectionModel().getSelectedIndex();
+                    activeModels.remove(resultItem);
+                    modelNameView.getItems().remove(modelNameView.getSelectionModel().getSelectedItem());
+                    modelNameView.getItems().add(index, resultItem);
                 }
             }
         });
@@ -155,6 +156,7 @@ public class GuiController {
         fileNames.clear();
         filePaths = new HashMap<>();
         countNameOfModels = new HashMap<>();
+        activeModels = new LinkedList<>();
     }
 
     @FXML

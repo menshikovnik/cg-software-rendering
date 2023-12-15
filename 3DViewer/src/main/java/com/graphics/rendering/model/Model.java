@@ -1,41 +1,71 @@
 package com.graphics.rendering.model;
 
+import com.graphics.rendering.math.AffineTransformation;
 import com.graphics.rendering.math.vector.Vector2D;
 import com.graphics.rendering.math.vector.Vector3D;
 import java.util.ArrayList;
 
 public class Model {
 
-    public ArrayList<Vector3D> vertices = new ArrayList<>();
-    public ArrayList<Vector2D> textureVertices = new ArrayList<>();
-    public ArrayList<Vector3D> normals = new ArrayList<>();
-    public ArrayList<Polygon> polygons = new ArrayList<>();
-    public ArrayList<String> nameOfMaterial = new ArrayList<>();
+    private ArrayList<Vector3D> vertices = new ArrayList<>();
+    private ArrayList<Vector2D> textureVertices = new ArrayList<>();
+    private ArrayList<Vector3D> normals = new ArrayList<>();
+    private ArrayList<Polygon> polygons = new ArrayList<>();
+    private ArrayList<String> nameOfMaterial = new ArrayList<>();
     private float normalInterpolationFactor;
     private String materialTemplateLib;
     private String nameOfModel;
+    private static final float TRANSLATION = 0.4f;
+
+    public Model(){}
+
+    public Model(ArrayList<Vector3D> vertices, ArrayList<Vector2D> textureVertices, ArrayList<Vector3D> normals, ArrayList<Polygon> polygons, ArrayList<String> nameOfMaterial, float normalInterpolationFactor, String materialTemplateLib, String nameOfModel) {
+        this.vertices = vertices;
+        this.textureVertices = textureVertices;
+        this.normals = normals;
+        this.polygons = polygons;
+        this.nameOfMaterial = nameOfMaterial;
+        this.normalInterpolationFactor = normalInterpolationFactor;
+        this.materialTemplateLib = materialTemplateLib;
+        this.nameOfModel = nameOfModel;
+    }
+
+    public Model(Model model){
+        this.vertices = new ArrayList<>(model.vertices);
+        this.textureVertices = new ArrayList<>(model.textureVertices);
+        this.normals = new ArrayList<>(model.normals);
+        this.polygons = new ArrayList<>(model.polygons);
+        this.nameOfMaterial = new ArrayList<>(model.nameOfMaterial);
+        this.normalInterpolationFactor = model.normalInterpolationFactor;
+        this.materialTemplateLib = model.materialTemplateLib;
+        this.nameOfModel = model.nameOfModel;
+    }
 
     public static void moveModelLeft(Model model){
         for (int i = 0;i < model.vertices.size();i++){
-            model.getVertices().get(i).sumVector1(new Vector3D(0.4f, 0, 0));
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(TRANSLATION, 0, 0));
+            model.vertices.set(i, vector3D);
         }
     }
 
     public static void moveModelRight(Model model){
         for (int i = 0;i < model.vertices.size();i++){
-            model.getVertices().get(i).sumVector1(new Vector3D(-0.4f, 0, 0));
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(-TRANSLATION, 0, 0));
+            model.vertices.set(i, vector3D);
         }
     }
 
     public static void moveModelForward(Model model){
         for (int i = 0;i < model.vertices.size();i++){
-            model.getVertices().get(i).sumVector1(new Vector3D(0, 0, -0.4f));
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, 0, -TRANSLATION));
+            model.vertices.set(i, vector3D);
         }
     }
 
     public static void moveModelBackward(Model model){
         for (int i = 0;i < model.vertices.size();i++){
-            model.getVertices().get(i).sumVector1(new Vector3D(0, 0, 0.4f));
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, 0, TRANSLATION));
+            model.vertices.set(i, vector3D);
         }
     }
 

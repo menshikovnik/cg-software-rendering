@@ -27,13 +27,13 @@ public class RenderEngine {
         Matrix4D projectionViewMatrix = projectionMatrix.multiplyMatrix(viewMatrix);
         Matrix4D projectionViewModelMatrix = projectionViewMatrix.multiplyMatrix(modelMatrix);
         for (Model mesh : meshes.values()) {
-            final int nPolygons = mesh.polygons.size();
+            final int nPolygons = mesh.getPolygons().size();
             for (int polygonInd = 0; polygonInd < nPolygons; ++polygonInd) {
-                final int nVerticesInPolygon = mesh.polygons.get(polygonInd).getVertexIndices().size();
+                final int nVerticesInPolygon = mesh.getPolygons().get(polygonInd).getVertexIndices().size();
 
                 ArrayList<Point2f> resultPoints = new ArrayList<>();
                 for (int vertexInPolygonInd = 0; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
-                    Vector3D vertex = mesh.vertices.get(mesh.polygons.get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
+                    Vector3D vertex = mesh.getVertices().get(mesh.getPolygons().get(polygonInd).getVertexIndices().get(vertexInPolygonInd));
 
                     Vector3D vertexVecmath = new Vector3D(vertex.getX(), vertex.getY(), vertex.getZ());
 

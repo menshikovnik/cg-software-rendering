@@ -1,6 +1,7 @@
 package com.graphics.rendering.models_operations;
 
 import com.graphics.rendering.GuiController;
+import com.graphics.rendering.model.Model;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.objwriter.ObjectWriter;
 import javafx.beans.binding.Bindings;
@@ -33,10 +34,12 @@ public class ModelOperations {
 
     public void saveInCurrentFile(MouseEvent event) {
         MenuItem save = new MenuItem();
-        save.textProperty().bind(Bindings.format("Save \"%s\"", guiController.getModelNameView().getSelectionModel().selectedItemProperty()));
+        String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+        save.textProperty().bind(Bindings.format("Save \"%s\"", menuItem.replaceAll("\\s.*", "")));
 
         save.setOnAction(saveEvent -> {
             String selectedItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+            selectedItem = selectedItem.replaceAll("\\s.*", "");
             if (guiController.getFilePaths().containsKey(selectedItem)) {
                 ObjectWriter.write(guiController.getFilePaths().get(selectedItem), guiController.getMeshes().get(selectedItem));
                 showSuccessfullySaveWindow(guiController.getAnchorPane());
@@ -54,10 +57,12 @@ public class ModelOperations {
 
     public void saveModelAs(MouseEvent event) {
         MenuItem saveItemAs = new MenuItem();
-        saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", guiController.getModelNameView().getSelectionModel().selectedItemProperty()));
+        String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+        saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", menuItem.replaceAll("\\s.*", "")));
 
         saveItemAs.setOnAction(saveAsEvent -> {
             String selectedItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+            selectedItem = selectedItem.replaceAll("\\s.*", "");
             saveAs(selectedItem);
         });
         if (!guiController.isLightMode()) {
@@ -69,10 +74,12 @@ public class ModelOperations {
     }
     public void removeModelFromTheScene(MouseEvent event) {
         MenuItem deleteItem = new MenuItem();
-        deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", guiController.getModelNameView().getSelectionModel().selectedItemProperty()));
+        String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+        deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", menuItem.replaceAll("\\s.*", "")));
 
         deleteItem.setOnAction(deleteEvent -> {
             String selectedItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+            selectedItem = selectedItem.replaceAll("\\s.*", "");
             String parseItem = parseNameOfModel(selectedItem);
             guiController.getCountNameOfModels().put(parseItem, guiController.getCountNameOfModels().get(parseItem) - 1);
             guiController.getMeshes().remove(selectedItem);
@@ -92,13 +99,16 @@ public class ModelOperations {
 
     public void copyModel(MouseEvent event) {
         MenuItem copy = new MenuItem();
-        copy.textProperty().bind(Bindings.format("Copy \"%s\"", guiController.getModelNameView().getSelectionModel().selectedItemProperty()));
+        String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+        copy.textProperty().bind(Bindings.format("Copy \"%s\"", menuItem.replaceAll("\\s.*", "")));
 
         copy.setOnAction(copyEvent -> {
             String selectedItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+            selectedItem = selectedItem.replaceAll("\\s.*", "");
             String item = parseNameOfModel(selectedItem);
             addInCountNameOfModels(item);
-            guiController.getMeshes().put(setNameOfModel(item), guiController.getMeshes().get(selectedItem));
+            Model model = new Model(guiController.getMeshes().get(selectedItem));
+            guiController.getMeshes().put(setNameOfModel(item), model);
             guiController.getFileNames().add(setNameOfModel(item));
             guiController.getModelNameView().setItems(guiController.getFileNames());
         });
@@ -113,12 +123,8 @@ public class ModelOperations {
 
     private String parseNameOfModel(String filePath) {
         File file = new File(filePath);
-
-        // Получаем имя файла (с расширением)
-        String fileNameWithExtension = file.getName();
-
-        // Получаем имя файла без расширения
-        return fileNameWithExtension.replaceFirst("[.][^.]+$", "");
+        String fileNameWithExtension = file.getName(); // имя файла с расширением
+        return fileNameWithExtension.replaceFirst("[.][^.]+$", ""); // имя файла без расширения
     }
 
     private String setNameOfModel(String nameOfModel){
