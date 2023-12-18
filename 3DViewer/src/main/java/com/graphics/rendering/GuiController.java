@@ -4,6 +4,7 @@ import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
 import com.graphics.rendering.models_operations.ModelOperations;
 import com.graphics.rendering.objreader.ObjReaderException;
+import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
 import com.graphics.rendering.render_engine.RenderEngine;
 import javafx.animation.Animation;
@@ -25,6 +26,8 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -46,10 +49,14 @@ public class GuiController {
     private ImageView buttonMoveImage;
 
     @FXML
+    private ImageView buttonRotateImage;
+    @FXML
     private ListView<String> modelNameView;
 
     @FXML
     private Button buttonMove;
+    @FXML
+    private Button buttonRotate;
 
     private final float TRANSLATION = 0.4F;
 
@@ -67,11 +74,12 @@ public class GuiController {
     ModelOperations modelOperations = new ModelOperations(this);
     private boolean isLightMode = false;
     private boolean isMoveModeEnabled = false;
+    private boolean isRotateModeEnabled = false;
 
     private LinkedList<String> activeModels = new LinkedList<>();
 
     private Camera camera = new Camera(
-            new Vector3D(0, 0, 35),
+            new Vector3D(8, 8, 10),
             new Vector3D(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
@@ -83,7 +91,6 @@ public class GuiController {
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
-
         KeyFrame frame = new KeyFrame(Duration.millis(1000 / FPS), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -91,6 +98,15 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
             handleCameraUpAndDownOnScroll(canvas);
+            try {
+            for (int i = 1; i <= 2; i++) {
+                Path fileName = Path.of("/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
+                String fileContent = Files.readString(fileName);
+                meshes.put("" + i, ObjectReader.read(fileContent));
+            }
+        } catch (IOException e){
+                throw new ObjReaderException("Error", -1);
+            }
 
             if (meshes != null) {
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
@@ -139,7 +155,6 @@ public class GuiController {
         }
 
         try {
-
             modelOperations.readFile(file);
 
         } catch (IOException exception) {
@@ -160,9 +175,13 @@ public class GuiController {
     }
 
     @FXML
-    private void handleCameraForward() {
-        if (!isMoveModeEnabled) {
+    private void handleActionForward() {
+        if (!isMoveModeEnabled && !isRotateModeEnabled) {
             camera.movePosition(new Vector3D(0, 0, -TRANSLATION));
+        } else if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnZClockwise(meshes.get(activeModel));
+            }
         } else {
             for (String activeModel : activeModels) {
                 Model.moveModelForward(meshes.get(activeModel));
@@ -171,9 +190,13 @@ public class GuiController {
     }
 
     @FXML
-    private void handleCameraBackward() {
-        if (!isMoveModeEnabled) {
+    private void handleActionBackward() {
+        if (!isMoveModeEnabled && !isRotateModeEnabled) {
             camera.movePosition(new Vector3D(0, 0, TRANSLATION));
+        } else if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnZNotClockwise(meshes.get(activeModel));
+            }
         } else {
             for (String activeModel : activeModels) {
                 Model.moveModelBackward(meshes.get(activeModel));
@@ -182,9 +205,13 @@ public class GuiController {
     }
 
     @FXML
-    private void handleCameraLeft() {
-        if (!isMoveModeEnabled) {
+    private void handleActionLeft() {
+        if (!isMoveModeEnabled && !isRotateModeEnabled) {
             camera.movePosition(new Vector3D(TRANSLATION, 0, 0));
+        } else if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnXNotClockwise(meshes.get(activeModel));
+            }
         } else {
             for (String activeModel : activeModels) {
                 Model.moveModelLeft(meshes.get(activeModel));
@@ -193,9 +220,13 @@ public class GuiController {
     }
 
     @FXML
-    private void handleCameraRight() {
-        if (!isMoveModeEnabled) {
+    private void handleActionRight() {
+        if (!isMoveModeEnabled && !isRotateModeEnabled) {
             camera.movePosition(new Vector3D(-TRANSLATION, 0, 0));
+        } else if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnXClockwise(meshes.get(activeModel));
+            }
         } else {
             for (String activeModel : activeModels) {
                 Model.moveModelRight(meshes.get(activeModel));
@@ -250,14 +281,28 @@ public class GuiController {
         }
     }
 
+    @FXML
+    private void toggleRotateMode() {
+        isRotateModeEnabled = !isRotateModeEnabled;
+        if (isRotateModeEnabled) {
+            buttonRotate.getStyleClass().remove("button-move");
+            buttonRotate.getStyleClass().add("button-move-pressed");
+        } else {
+            buttonRotate.getStyleClass().remove("button-move-pressed");
+            buttonRotate.getStyleClass().add("button-move");
+        }
+    }
+
 
     private void setLightMode() {
         anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
         anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-moon-96.png")).toString());
         Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-50.png")).toString());
+        Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-50.png")).toString());
         this.image.setImage(image);
         this.buttonMoveImage.setImage(imageMove);
+        this.buttonRotateImage.setImage(imageRotate);
         fileMenu.getStyleClass().clear();
         fileMenu.getStyleClass().add("menu");
     }
@@ -267,8 +312,10 @@ public class GuiController {
         anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-sun-90.png")).toString());
         Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-white-50.png")).toString());
+        Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-white-50.png")).toString());
         this.image.setImage(image);
         this.buttonMoveImage.setImage(imageMove);
+        this.buttonRotateImage.setImage(imageRotate);
         fileMenu.getStyleClass().clear();
         fileMenu.getStyleClass().add("menu");
     }
@@ -308,5 +355,9 @@ public class GuiController {
 
     public HashMap<String, Integer> getCountNameOfModels() {
         return countNameOfModels;
+    }
+
+    public LinkedList<String> getActiveModels() {
+        return activeModels;
     }
 }

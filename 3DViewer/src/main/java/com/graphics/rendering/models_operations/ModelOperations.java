@@ -24,6 +24,13 @@ public class ModelOperations {
     public ModelOperations(GuiController guiController){
         this.guiController = guiController;
     }
+    public ModelOperations(){}
+
+    /**
+     *
+     * @param selectedItem выбранный элемент
+     *
+     */
     protected void saveAs(String selectedItem) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save model as");

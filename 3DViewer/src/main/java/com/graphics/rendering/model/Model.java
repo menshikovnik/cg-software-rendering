@@ -16,6 +16,7 @@ public class Model {
     private String materialTemplateLib;
     private String nameOfModel;
     private static final float TRANSLATION = 0.4f;
+    private static final int ROTATE = 3;
 
     public Model(){}
 
@@ -67,6 +68,22 @@ public class Model {
             Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, 0, TRANSLATION));
             model.vertices.set(i, vector3D);
         }
+    }
+
+    public static void rotateModelOnZClockwise(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(0, 0, ROTATE, d));
+    }
+
+    public static void rotateModelOnZNotClockwise(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(0, 0, -ROTATE, d));
+    }
+
+    public static void rotateModelOnXNotClockwise(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(ROTATE, 0, 0, d));
+    }
+
+    public static void rotateModelOnXClockwise(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(-ROTATE, 0, 0, d));
     }
 
 

@@ -26,10 +26,10 @@ public class AffineTransformation {
 
 
     /**
-     * @param a        - угол поворота в градусах для матрицы поворота по оси X
-     * @param b        - угол поворота в градусах для матрицы поворота по оси Y
-     * @param c        - угол поворота в градусах для матрицы поворота по оси Z
-     * @param vector3D - вектор, который необходимо повернуть
+     * @param a        угол поворота в градусах для матрицы поворота по оси X
+     * @param b        угол поворота в градусах для матрицы поворота по оси Y
+     * @param c        угол поворота в градусах для матрицы поворота по оси Z
+     * @param vector3D вектор, который необходимо повернуть
      */
     public static Vector3D rotate(int a, int b, int c, Vector3D vector3D) {
         Vector4D vector4D = vector3D.translationToVector4D();
@@ -62,9 +62,9 @@ public class AffineTransformation {
 
 
     /**
-     * @param tx        - значение на которое смещается x
-     * @param ty        - значение на которое смещается y
-     * @param tz        - значение на которое смещается z
+     * @param tx       - значение на которое смещается x
+     * @param ty       - значение на которое смещается y
+     * @param tz       - значение на которое смещается z
      * @param vector3D - вектор, который необходимо сместить
      */
     public static Vector3D parallelTranslation(float tx, float ty, float tz, Vector3D vector3D) {
