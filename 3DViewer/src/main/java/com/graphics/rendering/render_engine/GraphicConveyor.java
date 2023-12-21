@@ -1,5 +1,6 @@
 package com.graphics.rendering.render_engine;
 
+import com.graphics.rendering.math.AffineTransformation;
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector3D;
 
@@ -8,7 +9,10 @@ import javax.vecmath.Point2f;
 public class GraphicConveyor {
 
     public static Matrix4D translateRotateScale() {
-        return new Matrix4D(true);
+        Matrix4D translation = AffineTransformation.getTranslationMatrix(0,0,0);
+        Matrix4D rotate = AffineTransformation.getRotateMatrix(0,0,0);
+        Matrix4D scale = AffineTransformation.getScaleMatrix(1,1,1);
+        return translation.multiplyMatrix(rotate).multiplyMatrix(scale);
     }
 
     public static Matrix4D lookAt(Vector3D eye, Vector3D target) {

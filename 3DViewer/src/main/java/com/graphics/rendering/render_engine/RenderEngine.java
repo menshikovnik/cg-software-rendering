@@ -39,7 +39,6 @@ public class RenderEngine {
                     Point2f resultPoint = vertexToPoint(projectionViewModelMatrix.multiplyVectorDivW(vertexVecmath), width, height);
                     resultPoints.add(resultPoint);
                 }
-//                renderAxes(graphicsContext, projectionViewModelMatrix, width, height);
                 for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                     graphicsContext.strokeLine(
                             resultPoints.get(vertexInPolygonInd - 1).x,

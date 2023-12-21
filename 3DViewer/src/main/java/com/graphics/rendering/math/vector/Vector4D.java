@@ -61,11 +61,7 @@ public class Vector4D {
      * Операция вычитания
      */
     public Vector4D subtractVector(Vector4D v) {
-        float a = x - v.getX();
-        float b = y - v.getY();
-        float c = z - v.getZ();
-        float d = w - v.getW();
-        return new Vector4D(a, b, c, d);
+        return new Vector4D(x - v.getX(), y - v.getY(), z - v.getZ(), w - v.getW());
     }
 
 
@@ -73,11 +69,7 @@ public class Vector4D {
      * Операция умножения на скаляр
      */
     public Vector4D multiplyScalar(float scalar) {
-        float a = x * scalar;
-        float b = y * scalar;
-        float c = z * scalar;
-        float d = w * scalar;
-        return new Vector4D(a, b, c, d);
+        return new Vector4D(x * scalar, y * scalar, z * scalar, w * scalar);
     }
 
 
@@ -86,13 +78,10 @@ public class Vector4D {
      */
     public Vector4D divScalar(float scalar) {
         if (Math.abs(scalar) < ESP) {
-            throw new IllegalArgumentException("Деление на ноль не допускается.");
+            throw new ArithmeticException("Деление на ноль не допускается.");
+        } else {
+            return new Vector4D(x / scalar, y / scalar, z / scalar, w / scalar);
         }
-        float a = x / scalar;
-        float b = y / scalar;
-        float c = z / scalar;
-        float d = w / scalar;
-        return new Vector4D(a, b, c, d);
     }
 
 
@@ -108,20 +97,13 @@ public class Vector4D {
      * Операция нормализации вектора
      */
     public Vector4D normalize() {
-        float a = 0;
-        float b = 0;
-        float c = 0;
-        float d = 0;
         float length = getLength();
         if (Math.abs(length) > ESP) {
-            a = x / length;
-            b = y / length;
-            c = z / length;
-            d = w / length;
+            return new Vector4D(x / length, y / length, z / length, w / length);
         } else {
-            throw new IllegalArgumentException("Невозможно нормализовать нулевой вектор.");
+            throw new ArithmeticException("Невозможно нормализовать нулевой вектор.");
         }
-        return new Vector4D(a, b, c, d);
+
     }
 
 
@@ -149,8 +131,11 @@ public class Vector4D {
                 '}';
     }
 
-    public boolean equalsAns(Vector4D vector4D) {
-        return Math.abs(x - vector4D.x) < ESP && Math.abs(y - vector4D.y) < ESP && Math.abs(z - vector4D.z) < ESP && Math.abs(w - vector4D.w) < ESP;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector4D other)) return false;
+        return Math.abs(x - other.x) < ESP && Math.abs(y - other.y) < ESP && Math.abs(z - other.z) < ESP && Math.abs(w - other.w) < ESP;
     }
 }
 

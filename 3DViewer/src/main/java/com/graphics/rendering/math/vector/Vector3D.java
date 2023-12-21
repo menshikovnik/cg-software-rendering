@@ -3,17 +3,17 @@ package com.graphics.rendering.math.vector;
 public class Vector3D {
     private static final float ESP = 1e-4f;
     private float x;
-    private float getY;
+    private float y;
     private float z;
 
     public Vector3D(float x, float y, float z) {
         this.x = x;
-        this.getY = y;
+        this.y = y;
         this.z = z;
     }
     public Vector3D() {
         this.x = 0;
-        this.getY = 0;
+        this.y = 0;
         this.z = 0;
     }
 
@@ -21,7 +21,7 @@ public class Vector3D {
     public float get(int index) {
         switch (index){
             case 0: return x;
-            case 1: return getY;
+            case 1: return y;
             case 2: return z;
         }
         throw new IllegalArgumentException();
@@ -31,7 +31,7 @@ public class Vector3D {
     }
 
     public float getY() {
-        return getY;
+        return y;
     }
 
     public float getZ() {
@@ -43,14 +43,11 @@ public class Vector3D {
      * Операция сложения
      */
     public Vector3D sumVector(Vector3D v) {
-        float a = x + v.getX();
-        float b = getY + v.getY();
-        float c = z + v.getZ();
-        return new Vector3D(a, b, c);
+        return new Vector3D(x + v.getX(), y + v.getY(), z + v.getZ());
     }
     public void sumVector1(Vector3D v) {
         this.x += v.getX();
-        this.getY += v.getY();
+        this.y += v.getY();
         this.z += v.getZ();
     }
 
@@ -59,10 +56,7 @@ public class Vector3D {
      * Операция вычитания
      */
     public Vector3D subtractVector(Vector3D v) {
-        float a = x - v.getX();
-        float b = getY - v.getY();
-        float c = z - v.getZ();
-        return new Vector3D(a, b, c);
+        return new Vector3D(x - v.getX(), y - v.getY(), z - v.getZ());
     }
 
 
@@ -70,10 +64,7 @@ public class Vector3D {
      * Операция умножения на скаляр
      */
     public Vector3D multiplyScalar(float scalar) {
-        float a = x * scalar;
-        float b = getY * scalar;
-        float c = z * scalar;
-        return new Vector3D(a, b, c);
+        return new Vector3D(x * scalar, y * scalar, z * scalar);
     }
 
 
@@ -82,12 +73,10 @@ public class Vector3D {
      */
     public Vector3D divScalar(float scalar) {
         if (Math.abs(scalar) < ESP) {
-            throw new IllegalArgumentException("Деление на ноль не допускается.");
+            throw new ArithmeticException("Деление на ноль не допускается.");
+        }else{
+            return new Vector3D(x / scalar, y / scalar, z / scalar);
         }
-        float a = x / scalar;
-        float b = getY / scalar;
-        float c = z / scalar;
-        return new Vector3D(a, b, c);
     }
 
 
@@ -95,7 +84,7 @@ public class Vector3D {
      * Операция вычисления длины
      */
     public float getLength() {
-        return (float) Math.sqrt(x * x + getY * getY + z * z);
+        return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
 
@@ -103,18 +92,12 @@ public class Vector3D {
      * Операция нормализации вектора
      */
     public Vector3D normalize() {
-        float a;
-        float b;
-        float c;
         float length = getLength();
         if (Math.abs(length) > ESP) {
-            a = x / length;
-            b = getY / length;
-            c = z / length;
+            return new Vector3D(x / length, y / length, z / length);
         } else {
-            throw new IllegalArgumentException("Невозможно нормализовать нулевой вектор.");
+            throw new ArithmeticException("Невозможно нормализовать нулевой вектор.");
         }
-        return new Vector3D(a, b, c);
     }
 
 
@@ -122,7 +105,7 @@ public class Vector3D {
      * Операция скалярного произведения
      */
     public float dotProduct(Vector3D v) {
-        return this.x * v.getX() + this.getY * v.getY() + this.z * v.getZ();
+        return this.x * v.getX() + this.y * v.getY() + this.z * v.getZ();
     }
 
 
@@ -130,9 +113,9 @@ public class Vector3D {
      * Операция векторного произведения
      */
     public Vector3D vectorMultiply(Vector3D v) {
-        float newX = this.getY * v.getZ() - this.z * v.getY();
+        float newX = this.y * v.getZ() - this.z * v.getY();
         float newY = this.z * v.getX() - this.x * v.getZ();
-        float newZ = this.x * v.getY() - this.getY * v.getX();
+        float newZ = this.x * v.getY() - this.y * v.getX();
 
         return new Vector3D(newX, newY, newZ);
     }
@@ -148,19 +131,15 @@ public class Vector3D {
     public String toString() {
         return "Vector3D{" +
                 "x=" + x +
-                ", y=" + getY +
+                ", y=" + y +
                 ", z=" + z +
                 '}';
-    }
-
-    public boolean equalsAns(Vector3D vector3D) {
-        return Math.abs(x - vector3D.x) < ESP && Math.abs(getY - vector3D.getY) < ESP && Math.abs(z - vector3D.z) < ESP;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Vector3D other)) return false;
-        return Math.abs(x - other.x) < ESP && Math.abs(getY - other.getY) < ESP && Math.abs(z - other.z) < ESP;
+        return Math.abs(x - other.x) < ESP && Math.abs(y - other.y) < ESP && Math.abs(z - other.z) < ESP;
     }
 }

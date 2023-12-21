@@ -49,9 +49,9 @@ public class Matrix3D {
      */
     public void printMatrix() {
         System.out.println("Matrix: ");
-        for (int i = 0; i < matrix.length; i++) {
+        for (float[] floats : matrix) {
             for (int j = 0; j < matrix[0].length; j++) {
-                System.out.print(matrix[i][j] + " ");
+                System.out.print(floats[j] + " ");
             }
             System.out.println();
         }
@@ -94,7 +94,6 @@ public class Matrix3D {
     /**
      * Операция умножения на соответствующий вектор-столбец
      */
-    //Переделал, теперь возвращаем не матрицу 1 на 3, а вектор3
     public Vector3D multiplyVector(Vector3D vectorCol) {
         if (vectorCol == null) {
             throw new NullPointerException("Предоставленный вектор не может быть нулевым");

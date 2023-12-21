@@ -13,7 +13,7 @@ class Vector2DTest {
         Vector2D check = vector2D.sumVector(vector2D1);
         Vector2D result = new Vector2D(20, 10);
 
-        Assertions.assertTrue(result.equalsAns(check));
+        Assertions.assertEquals(result, check);
     }
 
     @org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ class Vector2DTest {
         Vector2D check = vector2D.subtractVector(vector2D1);
         Vector2D result = new Vector2D(-10, 0);
 
-        Assertions.assertTrue(result.equalsAns(check));
+        Assertions.assertEquals(result, check);
     }
 
     @org.junit.jupiter.api.Test
@@ -33,7 +33,7 @@ class Vector2DTest {
         Vector2D check = vector2D.multiplyScalar(scalar);
         Vector2D result = new Vector2D(25, 25);
 
-        Assertions.assertTrue(result.equalsAns(check));
+        Assertions.assertEquals(result, check);
     }
 
     @org.junit.jupiter.api.Test
@@ -43,7 +43,7 @@ class Vector2DTest {
         Vector2D check = vector2D.divScalar(scalar);
         Vector2D result = new Vector2D(1, 1);
 
-        Assertions.assertTrue(result.equalsAns(check));
+        Assertions.assertEquals(result, check);
     }
 
     @org.junit.jupiter.api.Test
@@ -51,7 +51,7 @@ class Vector2DTest {
         Vector2D vector2D = new Vector2D(5, 5);
         float check = vector2D.getLength();
         float result = 7.07107f;
-        Assertions.assertEquals(check, result, 1e-4);
+        Assertions.assertEquals(result, check, 1e-4);
 
     }
 
@@ -60,8 +60,8 @@ class Vector2DTest {
         Vector2D vector2D = new Vector2D(5, 5);
         Vector2D check = vector2D.normalize();
         Vector2D result = new Vector2D(5 / 7.07107f, 5 / 7.07107f);
-        Assertions.assertEquals(check.getX(),result.getX(),1e-4);
-        Assertions.assertEquals(check.getY(),result.getY(),1e-4);
+        Assertions.assertEquals(result.getX(), check.getX(), 1e-4);
+        Assertions.assertEquals(result.getY(), check.getY(), 1e-4);
     }
 
     @org.junit.jupiter.api.Test
@@ -70,6 +70,6 @@ class Vector2DTest {
         Vector2D vector2D1 = new Vector2D(1, 10);
         float check = vector2D.dotProduct(vector2D1);
         float result = 55;
-        Assertions.assertEquals(check, result, 1e-4);
+        Assertions.assertEquals(result, check, 1e-4);
     }
 }

@@ -100,7 +100,7 @@ public class GuiController {
             handleCameraUpAndDownOnScroll(canvas);
             try {
             for (int i = 1; i <= 2; i++) {
-                Path fileName = Path.of("/Users/nikmenshikov/Documents/учеба/java_projects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
+                Path fileName = Path.of("/Users/Артём/IdeaProjects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
                 String fileContent = Files.readString(fileName);
                 meshes.put("" + i, ObjectReader.read(fileContent));
             }

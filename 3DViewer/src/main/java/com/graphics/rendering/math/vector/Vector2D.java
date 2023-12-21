@@ -12,12 +12,15 @@ public class Vector2D {
     }
 
     public float get(int index) {
-        switch (index){
-            case 0: return x;
-            case 1: return y;
+        switch (index) {
+            case 0:
+                return x;
+            case 1:
+                return y;
         }
         throw new IllegalArgumentException();
     }
+
     public float getX() {
         return x;
     }
@@ -31,10 +34,7 @@ public class Vector2D {
      * Операция сложения
      */
     public Vector2D sumVector(Vector2D v) {
-
-        float a = x + v.getX();
-        float b = y + v.getY();
-        return new Vector2D(a, b);
+        return new Vector2D(x + v.getX(), y + v.getY());
     }
 
 
@@ -42,10 +42,7 @@ public class Vector2D {
      * Операция вычитания
      */
     public Vector2D subtractVector(Vector2D v) {
-
-        float a = x - v.getX();
-        float b = y - v.getY();
-        return new Vector2D(a, b);
+        return new Vector2D(x - v.getX(), y - v.getY());
     }
 
 
@@ -53,9 +50,7 @@ public class Vector2D {
      * Операция умножения на скаляр
      */
     public Vector2D multiplyScalar(float scalar) {
-        float a = x * scalar;
-        float b = y * scalar;
-        return new Vector2D(a, b);
+        return new Vector2D(x * scalar, y * scalar);
     }
 
 
@@ -64,11 +59,9 @@ public class Vector2D {
      */
     public Vector2D divScalar(float scalar) {
         if (Math.abs(scalar) < ESP) {
-            throw new IllegalArgumentException("Деление на ноль не допускается.");
+            throw new ArithmeticException("Деление на ноль не допускается.");
         }
-        float a = x / scalar;
-        float b = y / scalar;
-        return new Vector2D(a, b);
+        return new Vector2D(x / scalar, y / scalar);
     }
 
 
@@ -84,17 +77,12 @@ public class Vector2D {
      * Операция нормализации вектора
      */
     public Vector2D normalize() {
-        float a = 0;
-        float b = 0;
-
         float length = getLength();
         if (Math.abs(length) > ESP) {
-            a = x / length;
-            b = y / length;
+            return new Vector2D(x / length, y / length);
         } else {
-            throw new IllegalArgumentException("Невозможно нормализовать нулевой вектор.");
+            throw new ArithmeticException("Невозможно нормализовать нулевой вектор.");
         }
-        return new Vector2D(a, b);
     }
 
 
@@ -111,10 +99,6 @@ public class Vector2D {
                 "x=" + x +
                 ", y=" + y +
                 '}';
-    }
-
-    public boolean equalsAns(Vector2D vector2D) {
-        return Math.abs(x - vector2D.x) < ESP && Math.abs(y - vector2D.y) < ESP;
     }
 
     @Override
