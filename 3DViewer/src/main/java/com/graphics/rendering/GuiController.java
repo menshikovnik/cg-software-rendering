@@ -75,16 +75,34 @@ public class GuiController {
     private boolean isLightMode = false;
     private boolean isMoveModeEnabled = false;
     private boolean isRotateModeEnabled = false;
+    private int ANGLE = 45;
+    private float RADIUS = 10;
 
     private LinkedList<String> activeModels = new LinkedList<>();
 
     private Camera camera = new Camera(
-            new Vector3D(8, 8, 10),
+            new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLE))), 8, (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)))),
             new Vector3D(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
     @FXML
     private void initialize() {
+
+        try {
+            for (int i = 1; i <= 2; i++) {
+                Path fileName = Path.of("/Users/Артём/IdeaProjects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
+                String fileContent = Files.readString(fileName);
+                if (i == 2) {
+                    meshes.put("PcMonitor", ObjectReader.read(fileContent));
+                    fileNames.add("PcMonitor");
+                    modelNameView.setItems(fileNames);
+                } else {
+                    meshes.put("" + i, ObjectReader.read(fileContent));
+                }
+            }
+        } catch (IOException e) {
+            throw new ObjReaderException("Error", -1);
+        }
         contextMenu = new ContextMenu();
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
@@ -98,15 +116,6 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
             handleCameraUpAndDownOnScroll(canvas);
-            try {
-            for (int i = 1; i <= 2; i++) {
-                Path fileName = Path.of("/Users/Артём/IdeaProjects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
-                String fileContent = Files.readString(fileName);
-                meshes.put("" + i, ObjectReader.read(fileContent));
-            }
-        } catch (IOException e){
-                throw new ObjReaderException("Error", -1);
-            }
 
             if (meshes != null) {
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
@@ -177,7 +186,10 @@ public class GuiController {
     @FXML
     private void handleActionForward() {
         if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            camera.movePosition(new Vector3D(0, 0, -TRANSLATION));
+            RADIUS += TRANSLATION;
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
+            camera.movePosition(new Vector3D(newX, 0, newZ));
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnZClockwise(meshes.get(activeModel));
@@ -192,7 +204,10 @@ public class GuiController {
     @FXML
     private void handleActionBackward() {
         if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            camera.movePosition(new Vector3D(0, 0, TRANSLATION));
+            RADIUS -= TRANSLATION;
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
+            camera.movePosition(new Vector3D(newX, 0, newZ));
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnZNotClockwise(meshes.get(activeModel));
@@ -207,7 +222,14 @@ public class GuiController {
     @FXML
     private void handleActionLeft() {
         if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            camera.movePosition(new Vector3D(TRANSLATION, 0, 0));
+            if (ANGLE < -360) {
+                ANGLE = 0;
+            }
+            ANGLE -= 2;
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
+            camera.movePosition(new Vector3D(newX, 0, newZ));
+
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnXNotClockwise(meshes.get(activeModel));
@@ -222,7 +244,14 @@ public class GuiController {
     @FXML
     private void handleActionRight() {
         if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            camera.movePosition(new Vector3D(-TRANSLATION, 0, 0));
+            if (ANGLE > 360) {
+                ANGLE = 0;
+            }
+            ANGLE += 2;
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
+            camera.movePosition(new Vector3D(newX, 0, newZ));
+
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnXClockwise(meshes.get(activeModel));
@@ -236,8 +265,10 @@ public class GuiController {
 
     @FXML
     private void backToZeroCoordinates() {
+        ANGLE = 45;
+        RADIUS = 10;
         camera = new Camera(
-                new Vector3D(0, 0, 35),
+                new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLE))), 8, (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)))),
                 new Vector3D(0, 0, 0),
                 1.0F, 1, 0.01F, 80);
     }
