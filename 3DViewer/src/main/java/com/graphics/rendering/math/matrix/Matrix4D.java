@@ -13,10 +13,9 @@ public class Matrix4D {
 
 
     /**
-     * Конструктор
+     * Конструктор матрицы 4x4
      *
-     * @param isUnitMatrix true - единичная матрица
-     * @param isUnitMatrix false - нулевая матрица
+     * @param isUnitMatrix true/false единичная матрица/нулевая матрица
      */
     public Matrix4D(boolean isUnitMatrix) {
         if (isUnitMatrix) {
@@ -30,6 +29,12 @@ public class Matrix4D {
         }
     }
 
+    /**
+     * Конструктор матрицы 4x4.
+     *
+     * @param matrix Двумерный массив значений, представляющий матрицу 4x4.
+     * @throws IllegalArgumentException Если предоставленная матрица не является матрицей 4x4.
+     */
     public Matrix4D(float[][] matrix) {
         if (matrix.length != 4 || matrix[0].length != 4) {
             throw new IllegalArgumentException("Предоставленная матрица должна быть матрицей 4 на 4");
@@ -37,17 +42,29 @@ public class Matrix4D {
         this.matrix = matrix;
     }
 
+    /**
+     * Возвращает двумерный массив значений текущей матрицы.
+     *
+     * @return Двумерный массив значений текущей матрицы 4x4.
+     */
     public float[][] getMatrix() {
         return matrix;
     }
 
+    /**
+     * Получение значения ячейки матрицы по заданным индексам.
+     *
+     * @param row Индекс строки.
+     * @param col Индекс столбца.
+     * @return Значение ячейки матрицы по заданным индексам.
+     */
     public float getCell(int row, int col) {
         return matrix[row][col];
     }
 
 
     /**
-     * Операция вывода матрицы
+     * Операция вывода матрицы.
      */
     public void printMatrix() {
         System.out.println("Matrix: ");
@@ -61,7 +78,11 @@ public class Matrix4D {
 
 
     /**
-     * Операция сложения матрицы
+     * Операция сложения матрицы.
+     *
+     * @param matrix4D Матрица 4x4, которую нужно сложить с текущей матрицей.
+     * @return Новая матрица 4x4, являющаяся результатом сложения текущей матрицы и предоставленной матрицы.
+     * @throws IllegalArgumentException Если предоставленная матрица не является матрицей 4x4.
      */
     public Matrix4D sumMatrix(Matrix4D matrix4D) {
         if (matrix4D.getMatrix().length != 4 || matrix4D.getMatrix()[0].length != 4) {
@@ -76,9 +97,12 @@ public class Matrix4D {
         return new Matrix4D(values);
     }
 
-
     /**
-     * Операция вычитания матрицы
+     * Операция вычитания матрицы.
+     *
+     * @param matrix4D Матрица 4x4, которую нужно вычесть из текущей матрицы.
+     * @return Новая матрица 4x4, являющаяся результатом вычитания предоставленной матрицы из текущей матрицы.
+     * @throws IllegalArgumentException Если предоставленная матрица не является матрицей 4x4.
      */
     public Matrix4D subtractMatrix(Matrix4D matrix4D) {
         if (matrix4D.getMatrix().length != 4 || matrix4D.getMatrix()[0].length != 4) {
@@ -95,7 +119,11 @@ public class Matrix4D {
 
 
     /**
-     * Операция умножения на соответствующий вектор-столбец
+     * Операция умножения на соответствующий вектор-столбец.
+     *
+     * @param vectorCol Вектор-столбец, на который нужно умножить текущую матрицу.
+     * @return Новый вектор, являющийся результатом умножения текущей матрицы на предоставленный вектор-столбец.
+     * @throws NullPointerException Если предоставленный вектор равен null.
      */
     public Vector4D multiplyVector(Vector4D vectorCol) {
         if (vectorCol == null) {
@@ -111,6 +139,15 @@ public class Matrix4D {
         }
         return new Vector4D(values[0], values[1], values[2], values[3]);
     }
+
+    /**
+     * Операция умножения на соответствующий вектор-столбец с делением на W-координату.
+     *
+     * @param vectorCol3D Вектор-столбец с трехмерными координатами, на который нужно умножить текущую матрицу.
+     * @return Новый вектор, являющийся результатом умножения текущей матрицы на предоставленный вектор-столбец,
+     * с последующим делением на W-координату нового вектора.
+     * @throws NullPointerException Если предоставленный вектор равен null.
+     */
     public Vector3D multiplyVectorDivW(Vector3D vectorCol3D) {
         if (vectorCol3D == null) {
             throw new NullPointerException("Предоставленный вектор не может быть нулевым");
@@ -124,12 +161,16 @@ public class Matrix4D {
                 values[i] += matrix[i][j] * vector4DCol.get(j);
             }
         }
-        return new Vector3D(values[0]/values[3], values[1]/values[3], values[2]/values[3]);
+        return new Vector3D(values[0] / values[3], values[1] / values[3], values[2] / values[3]);
     }
 
 
     /**
-     * Операция перемножения матриц
+     * Операция перемножения матриц.
+     *
+     * @param matrix4D Матрица 4x4, на которую нужно умножить текущую матрицу.
+     * @return Новая матрица 4x4, являющаяся результатом перемножения текущей матрицы на предоставленную матрицу.
+     * @throws IllegalArgumentException Если предоставленная матрица не является матрицей 4x4.
      */
     public Matrix4D multiplyMatrix(Matrix4D matrix4D) {
         if (matrix4D.getMatrix().length != 4 || matrix4D.getMatrix()[0].length != 4) {
@@ -149,7 +190,10 @@ public class Matrix4D {
 
 
     /**
-     * Операция транспонирования
+     * Операция транспонирования.
+     *
+     * @return Новая матрица 4x4, являющаяся результатом транспонирования текущей матрицы.
+     * @throws IllegalArgumentException Если текущая матрица не является матрицей 4x4.
      */
     public Matrix4D transpose() {
         if (matrix.length != 4 || matrix[0].length != 4) {
@@ -164,6 +208,12 @@ public class Matrix4D {
         return new Matrix4D(transposed);
     }
 
+    /**
+     * Вычисление определителя матрицы.
+     *
+     * @return Определитель текущей матрицы 4x4.
+     * @throws IllegalArgumentException Если текущая матрица не является матрицей 3x3.
+     */
     public float determinant() {
         if (matrix.length != 4 || matrix[0].length != 4) {
             throw new IllegalArgumentException("Предоставленная матрица должна быть матрицей 4 на 4.");
