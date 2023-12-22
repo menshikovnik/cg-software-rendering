@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -77,6 +78,7 @@ public class GuiController {
     private boolean isRotateModeEnabled = false;
     private int ANGLE = 45;
     private float RADIUS = 10;
+    private double mouseX, mouseY;
 
     private LinkedList<String> activeModels = new LinkedList<>();
 
@@ -116,6 +118,7 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
             handleCameraUpAndDownOnScroll(canvas);
+            handleCameraRotationOnMouseDrag(canvas);
 
             if (meshes != null) {
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
@@ -219,13 +222,39 @@ public class GuiController {
         }
     }
 
+    private void handleCameraRotationOnMouseDrag(Node node) {
+        node.setOnMousePressed(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+        node.setOnMouseDragged(event -> {
+            float deltaX = (float) (event.getSceneX() - mouseX);
+            float deltaY = (float) (event.getSceneY() - mouseY);
+
+            if (ANGLE > 360 || ANGLE < -360) {
+                ANGLE = 0;
+            }
+
+            ANGLE += deltaX;
+            ANGLE -= deltaY;
+
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
+            camera.movePosition(new Vector3D(newX, 0, newZ));
+
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+    }
+
+
     @FXML
     private void handleActionLeft() {
         if (!isMoveModeEnabled && !isRotateModeEnabled) {
             if (ANGLE < -360) {
                 ANGLE = 0;
             }
-            ANGLE -= 2;
+            ANGLE -= 1;
             float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
             float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
             camera.movePosition(new Vector3D(newX, 0, newZ));
@@ -247,7 +276,7 @@ public class GuiController {
             if (ANGLE > 360) {
                 ANGLE = 0;
             }
-            ANGLE += 2;
+            ANGLE += 1;
             float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLE)) - camera.getPosition().getX());
             float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLE)) - camera.getPosition().getZ());
             camera.movePosition(new Vector3D(newX, 0, newZ));
