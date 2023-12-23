@@ -2,7 +2,7 @@ package com.graphics.rendering;
 
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
-import com.graphics.rendering.models_operations.ModelOperations;
+import com.graphics.rendering.gui_functionality.ModelOperations;
 import com.graphics.rendering.objreader.ObjReaderException;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
@@ -64,10 +64,6 @@ public class GuiController {
 
     private HashMap<String, Model> meshes = new HashMap<>();
 
-    private HashMap<String, String> filePaths = new HashMap<>();
-
-    private HashMap<String, Integer> countNameOfModels = new HashMap<>();
-
     private ContextMenu contextMenu;
 
     private final ObservableList<String> fileNames = FXCollections.observableArrayList();
@@ -90,11 +86,11 @@ public class GuiController {
 
         try {
             for (int i = 1; i <= 2; i++) {
-                Path fileName = Path.of("/Users/Артём/IdeaProjects/cg-software-rendering/3DViewer/src/main/resources/default_model/" + i + ".obj");
+                Path fileName = Path.of("3DViewer/src/main/resources/default_model/" + i + ".obj");
                 String fileContent = Files.readString(fileName);
                 if (i == 2) {
-                    meshes.put("PcMonitor", ObjectReader.read(fileContent));
-                    fileNames.add("PcMonitor");
+                    meshes.put("PcMonitor.001", ObjectReader.read(fileContent));
+                    fileNames.add("PcMonitor.001");
                     modelNameView.setItems(fileNames);
                 } else {
                     meshes.put("" + i, ObjectReader.read(fileContent));
@@ -178,8 +174,6 @@ public class GuiController {
         meshes = new HashMap<>();
         modelNameView.setItems(null);
         fileNames.clear();
-        filePaths = new HashMap<>();
-        countNameOfModels = new HashMap<>();
         activeModels = new LinkedList<>();
     }
 
@@ -368,10 +362,6 @@ public class GuiController {
         return modelNameView;
     }
 
-    public HashMap<String, String> getFilePaths() {
-        return filePaths;
-    }
-
     public ContextMenu getContextMenu() {
         return contextMenu;
     }
@@ -384,11 +374,11 @@ public class GuiController {
         return isLightMode;
     }
 
-    public HashMap<String, Integer> getCountNameOfModels() {
-        return countNameOfModels;
-    }
-
     public LinkedList<String> getActiveModels() {
         return activeModels;
+    }
+
+    public ImageView getImage() {
+        return image;
     }
 }
