@@ -200,13 +200,14 @@ public class ModelOperations {
 
     private String setName(String selectedItem) {
         String item = selectedItem.replaceAll("[\\d.]", "");
-        String result = "";
+        String result;
         for (int i = guiController.getFileNames().size() - 1;i >=0;i--){
             if (item.equals(guiController.getFileNames().get(i).replaceAll("[\\d.]", ""))){
                 result = item + ".00" + (extractDigits(guiController.getFileNames().get(i)) + 1);
                 return result;
             }
         }
+        result = item + ".001";
         return result;
     }
 
