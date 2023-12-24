@@ -29,7 +29,7 @@ public class ModelOperations {
     /**
      * @param selectedItem выбранный элемент
      */
-    protected void saveAs(String selectedItem) {
+    private void saveAs(String selectedItem) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save model as");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
@@ -37,7 +37,7 @@ public class ModelOperations {
         ObjectWriter.write(file.getAbsolutePath(), guiController.getMeshes().get(selectedItem));
     }
 
-    public void saveInCurrentFile(MouseEvent event) {
+    private void saveInCurrentFile(MouseEvent event) {
         MenuItem save = new MenuItem();
         String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
         save.textProperty().bind(Bindings.format("Save \"%s\"", menuItem.replaceAll("\\s.*", "")));
@@ -61,7 +61,7 @@ public class ModelOperations {
         guiController.getContextMenu().show(guiController.getModelNameView(), event.getScreenX(), event.getScreenY());
     }
 
-    public void saveModelAs(MouseEvent event) {
+    private void saveModelAs(MouseEvent event) {
         MenuItem saveItemAs = new MenuItem();
         String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
         saveItemAs.textProperty().bind(Bindings.format("Save As.. \"%s\"", menuItem.replaceAll("\\s.*", "")));
@@ -80,7 +80,7 @@ public class ModelOperations {
         guiController.getContextMenu().show(guiController.getModelNameView(), event.getScreenX(), event.getScreenY());
     }
 
-    public void removeModelFromTheScene(MouseEvent event) {
+    private void removeModelFromTheScene(MouseEvent event) {
         MenuItem deleteItem = new MenuItem();
         String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
         deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", menuItem.replaceAll("\\s.*", "")));
@@ -108,7 +108,7 @@ public class ModelOperations {
         guiController.getContextMenu().show(guiController.getModelNameView(), event.getScreenX(), event.getScreenY() + yOffset);
     }
 
-    public void copyModel(MouseEvent event) {
+    private void copyModel(MouseEvent event) {
         MenuItem copy = new MenuItem();
         String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
         copy.textProperty().bind(Bindings.format("Copy \"%s\"", menuItem.replaceAll("\\s.*", "")));
@@ -226,5 +226,13 @@ public class ModelOperations {
         }
 
         return Integer.parseInt(result.toString());
+    }
+
+    public void contextMenu(MouseEvent event){
+        guiController.getContextMenu().getItems().clear();
+        removeModelFromTheScene(event);
+        saveModelAs(event);
+        saveInCurrentFile(event);
+        copyModel(event);
     }
 }

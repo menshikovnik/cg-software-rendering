@@ -1,10 +1,10 @@
 package com.graphics.rendering;
 
+import com.graphics.rendering.gui_functionality.ModelOperations;
+import com.graphics.rendering.gui_functionality.Style;
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
-import com.graphics.rendering.gui_functionality.ModelOperations;
 import com.graphics.rendering.objreader.ObjReaderException;
-import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.render_engine.Camera;
 import com.graphics.rendering.render_engine.RenderEngine;
 import javafx.animation.Animation;
@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
@@ -26,11 +25,8 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Objects;
 
 public class GuiController {
     @FXML
@@ -67,7 +63,8 @@ public class GuiController {
     private ContextMenu contextMenu;
 
     private final ObservableList<String> fileNames = FXCollections.observableArrayList();
-    ModelOperations modelOperations = new ModelOperations(this);
+    private final ModelOperations modelOperations = new ModelOperations(this);
+    private final Style style = new Style(this);
     private boolean isLightMode = false;
     private boolean isMoveModeEnabled = false;
     private boolean isRotateModeEnabled = false;
@@ -83,22 +80,7 @@ public class GuiController {
 
     @FXML
     private void initialize() {
-
-        try {
-            for (int i = 1; i <= 2; i++) {
-                Path fileName = Path.of("3DViewer/src/main/resources/default_model/" + i + ".obj");
-                String fileContent = Files.readString(fileName);
-                if (i == 2) {
-                    meshes.put("PcMonitor.001", ObjectReader.read(fileContent));
-                    fileNames.add("PcMonitor.001");
-                    modelNameView.setItems(fileNames);
-                } else {
-                    meshes.put("" + i, ObjectReader.read(fileContent));
-                }
-            }
-        } catch (IOException e) {
-            throw new ObjReaderException("Error", -1);
-        }
+        style.setDefaultScene();
         contextMenu = new ContextMenu();
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
@@ -120,26 +102,11 @@ public class GuiController {
 
         modelNameView.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                contextMenu.getItems().clear();
-                modelOperations.removeModelFromTheScene(event);
-                modelOperations.saveModelAs(event);
-                modelOperations.saveInCurrentFile(event);
-                modelOperations.copyModel(event);
+                modelOperations.contextMenu(event);
             } else if (event.getButton() == MouseButton.PRIMARY) {
                 String selectedItem = modelNameView.getSelectionModel().getSelectedItem();
                 String resultItem = selectedItem.replaceAll("\\s.*", "");
-                if (!activeModels.contains(resultItem)) {
-                    activeModels.add(resultItem);
-                    int index = modelNameView.getSelectionModel().getSelectedIndex();
-                    String selectedItemActive = resultItem + "    ACTIVE NOW";
-                    modelNameView.getItems().remove(modelNameView.getSelectionModel().getSelectedItem());
-                    modelNameView.getItems().add(index, selectedItemActive);
-                } else {
-                    int index = modelNameView.getSelectionModel().getSelectedIndex();
-                    activeModels.remove(resultItem);
-                    modelNameView.getItems().remove(modelNameView.getSelectionModel().getSelectedItem());
-                    modelNameView.getItems().add(index, resultItem);
-                }
+                style.activeMode(resultItem);
             }
         });
 
@@ -287,62 +254,22 @@ public class GuiController {
         isLightMode = !isLightMode;
 
         if (isLightMode) {
-            setLightMode();
+            style.setLightMode();
         } else {
-            setDarkMode();
+            style.setDarkMode();
         }
     }
 
     @FXML
-    private void toggleMode() {
+    private void toggleMoveMode() {
         isMoveModeEnabled = !isMoveModeEnabled;
-
-        if (isMoveModeEnabled) {
-            buttonMove.getStyleClass().remove("button-move");
-            buttonMove.getStyleClass().add("button-move-pressed");
-        } else {
-            buttonMove.getStyleClass().remove("button-move-pressed");
-            buttonMove.getStyleClass().add("button-move");
-        }
+        style.setMoveButtonStyle();
     }
 
     @FXML
     private void toggleRotateMode() {
         isRotateModeEnabled = !isRotateModeEnabled;
-        if (isRotateModeEnabled) {
-            buttonRotate.getStyleClass().remove("button-move");
-            buttonRotate.getStyleClass().add("button-move-pressed");
-        } else {
-            buttonRotate.getStyleClass().remove("button-move-pressed");
-            buttonRotate.getStyleClass().add("button-move");
-        }
-    }
-
-
-    private void setLightMode() {
-        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
-        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-moon-96.png")).toString());
-        Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-50.png")).toString());
-        Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-50.png")).toString());
-        this.image.setImage(image);
-        this.buttonMoveImage.setImage(imageMove);
-        this.buttonRotateImage.setImage(imageRotate);
-        fileMenu.getStyleClass().clear();
-        fileMenu.getStyleClass().add("menu");
-    }
-
-    private void setDarkMode() {
-        anchorPane.getStylesheets().remove(Objects.requireNonNull(getClass().getResource("/styles/lightMode.css")).toString());
-        anchorPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/darkMode.css")).toString());
-        Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-sun-90.png")).toString());
-        Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-white-50.png")).toString());
-        Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-white-50.png")).toString());
-        this.image.setImage(image);
-        this.buttonMoveImage.setImage(imageMove);
-        this.buttonRotateImage.setImage(imageRotate);
-        fileMenu.getStyleClass().clear();
-        fileMenu.getStyleClass().add("menu");
+       style.setRotateButtonStyle();
     }
 
     public Canvas getCanvas() {
@@ -380,5 +307,33 @@ public class GuiController {
 
     public ImageView getImage() {
         return image;
+    }
+
+    public ImageView getButtonMoveImage() {
+        return buttonMoveImage;
+    }
+
+    public ImageView getButtonRotateImage() {
+        return buttonRotateImage;
+    }
+
+    public Button getButtonMove() {
+        return buttonMove;
+    }
+
+    public Button getButtonRotate() {
+        return buttonRotate;
+    }
+
+    public Menu getFileMenu() {
+        return fileMenu;
+    }
+
+    public boolean isMoveModeEnabled() {
+        return isMoveModeEnabled;
+    }
+
+    public boolean isRotateModeEnabled() {
+        return isRotateModeEnabled;
     }
 }
