@@ -2,6 +2,7 @@ package com.graphics.rendering.gui_functionality;
 
 import com.graphics.rendering.GuiController;
 import com.graphics.rendering.model.Model;
+import com.graphics.rendering.model.VertexDeleter;
 import com.graphics.rendering.objreader.ObjectReader;
 import com.graphics.rendering.objwriter.ObjectWriter;
 import javafx.beans.binding.Bindings;
@@ -132,6 +133,33 @@ public class ModelOperations {
         guiController.getContextMenu().show(guiController.getModelNameView(), event.getScreenX(), event.getScreenY());
     }
 
+    private void deleteVertices(MouseEvent event) {
+        MenuItem deleteVertices = new MenuItem();
+        String menuItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+        deleteVertices.textProperty().bind(Bindings.format("Delete Vertices \"%s\"", menuItem.replaceAll("\\s.*", "")));
+
+        deleteVertices.setOnAction(deleteVerticesEvent -> {
+            String selectedItem = guiController.getModelNameView().getSelectionModel().getSelectedItem();
+            selectedItem = selectedItem.replaceAll("\\s.*", "");
+            FileChooser chooseDeleteVerticesFile = new FileChooser();
+            chooseDeleteVerticesFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Delete Vertices (*.txt)", "*.txt"));
+            File deleteFile = chooseDeleteVerticesFile.showOpenDialog(guiController.getCanvas().getScene().getWindow());
+
+            try {
+                VertexDeleter.deleteVertices(guiController.getMeshes().get(selectedItem), parseIntVertices(deleteFile));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        if (!guiController.isLightMode()) {
+            deleteVertices.setStyle("-fx-text-fill: white;");
+        }
+
+        guiController.getContextMenu().getItems().add(deleteVertices);
+        guiController.getContextMenu().show(guiController.getModelNameView(), event.getScreenX(), event.getScreenY());
+    }
+
     /**
      * Метод принимает на вход путь к файлу, с помощью регулярного выражение парсит и
      * мы получаем из name.obj имя вида: name
@@ -234,5 +262,16 @@ public class ModelOperations {
         saveModelAs(event);
         saveInCurrentFile(event);
         copyModel(event);
+        deleteVertices(event);
+    }
+
+    private int[] parseIntVertices(File file) throws IOException {
+        String stringValues = Files.readString(Path.of(file.getAbsolutePath()));
+        stringValues = stringValues.replaceAll("\\s.*", "");
+        int[] result = new int[stringValues.length()];
+        for (int i = 0;i < result.length;i++){
+            result[i] = Integer.parseInt(String.valueOf(stringValues.charAt(i)));
+        }
+        return result;
     }
 }
