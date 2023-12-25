@@ -159,13 +159,13 @@
                  </accelerator>
              </MenuItem>
 
-             <MenuItem mnemonicParsing="false" text="Scale Up">
+             <MenuItem mnemonicParsing="false" onAction="#handleScaleUp" text="Scale Up">
                  <accelerator>
                      <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                  </accelerator>
              </MenuItem>
 
-             <MenuItem mnemonicParsing="false" text="Scale Down">
+             <MenuItem mnemonicParsing="false" onAction="#handleScaleDown" text="Scale Down">
                  <accelerator>
                      <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                  </accelerator>

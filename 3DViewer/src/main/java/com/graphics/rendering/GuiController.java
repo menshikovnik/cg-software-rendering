@@ -357,6 +357,23 @@ public class GuiController {
                 1.0F, 1, 0.01F, 80);
     }
 
+    @FXML
+    private void handleScaleUp(){
+        if (isScalingModeEnabled){
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnYUp(meshes.get(activeModel));
+            }
+        }
+    }
+
+    @FXML
+    private void handleScaleDown(){
+        if (isScalingModeEnabled){
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnYDown(meshes.get(activeModel));
+            }
+        }
+    }
     public static boolean isFileNull(File file) {
         return file == null;
     }
