@@ -20,7 +20,7 @@ public class Model {
     private static final float TRANSLATION = 0.4f;
     private static final int ROTATE = 3;
 
-    private static final float SCALE = 0.01f;
+    private static final float SCALE = 10f;
 
     public Model() {
     }

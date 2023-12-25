@@ -80,6 +80,7 @@
                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
                    </accelerator>
                </MenuItem>
+
                <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Move Left" >
                    <accelerator>
                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
@@ -160,13 +161,13 @@
 
              <MenuItem mnemonicParsing="false" text="Scale Up">
                  <accelerator>
-                     <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                     <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                  </accelerator>
              </MenuItem>
 
              <MenuItem mnemonicParsing="false" text="Scale Down">
                  <accelerator>
-                     <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                     <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                  </accelerator>
              </MenuItem>
          </Menu>
@@ -226,9 +227,7 @@
         </styleClass>
         <graphic>
             <ImageView fitHeight="36.0" fx:id="buttonScaleImage" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                <image>
                     <Image url="@../../../../photo/icons8-stretch-tool-white-96.png" />
-                </image>
             </ImageView>
         </graphic>
     </Button>
