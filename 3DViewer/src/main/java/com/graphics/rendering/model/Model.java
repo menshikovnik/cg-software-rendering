@@ -20,6 +20,8 @@ public class Model {
     private static final float TRANSLATION = 0.4f;
     private static final int ROTATE = 3;
 
+    private static final float SCALE = 0.01f;
+
     public Model() {
     }
 
@@ -73,6 +75,28 @@ public class Model {
         }
     }
 
+    public static void moveModelOnYUp(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, TRANSLATION, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void moveModelOnYDown(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.parallelTranslation(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, -TRANSLATION, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void rotateModelOnYUp(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(0, ROTATE, 0, d));
+    }
+
+    public static void rotateModelOnYDown(Model model){
+        model.vertices.replaceAll(d -> AffineTransformation.rotate(0, -ROTATE, 0, d));
+    }
+
     public static void rotateModelOnZClockwise(Model model) {
         model.vertices.replaceAll(d -> AffineTransformation.rotate(0, 0, ROTATE, d));
     }
@@ -88,6 +112,49 @@ public class Model {
     public static void rotateModelOnXClockwise(Model model) {
         model.vertices.replaceAll(d -> AffineTransformation.rotate(-ROTATE, 0, 0, d));
     }
+
+    public static void scaleModelOnXForward(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(SCALE, 0, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void scaleModelOnXBackward(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(-SCALE, 0, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void scaleModelOnZRight(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, 0, SCALE));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void scaleModelOnZLeft(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, 0, -SCALE));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void scaleModelOnYUp(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, SCALE, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
+    public static void scaleModelOnYDown(Model model){
+        for (int i = 0; i < model.vertices.size(); i++) {
+            Vector3D vector3D = AffineTransformation.scale(model.getVertices().get(i).getX(), model.getVertices().get(i).getY(), model.getVertices().get(i).getZ(), new Vector3D(0, -SCALE, 0));
+            model.vertices.set(i, vector3D);
+        }
+    }
+
 
 
     public String getNameOfModel() {
