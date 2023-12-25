@@ -43,6 +43,8 @@ public class GuiController {
 
     @FXML
     private ImageView buttonMoveImage;
+    @FXML
+    private ImageView buttonScaleImage;
 
     @FXML
     private ImageView buttonRotateImage;
@@ -53,6 +55,8 @@ public class GuiController {
     private Button buttonMove;
     @FXML
     private Button buttonRotate;
+    @FXML
+    private Button buttonScale;
 
     private final float TRANSLATION = 0.3F;
 
@@ -68,16 +72,17 @@ public class GuiController {
     private boolean isLightMode = false;
     private boolean isMoveModeEnabled = false;
     private boolean isRotateModeEnabled = false;
-    private int ANGLEforXZ = 45;
-    private int ANGLEforY = 45;
+    private boolean isScalingModeEnabled = false;
+    private int ANGLEForXZ = 45;
+    private int ANGLEForY = 45;
     private float RADIUS = 13;
     private double mouseX, mouseY;
 
     private LinkedList<String> activeModels = new LinkedList<>();
     private Camera camera = new Camera(
-            new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY))),
-                         (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY))),
-                         (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)))),
+            new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY))),
+                    (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY))),
+                    (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)))),
             new Vector3D(0, 0, 0),
             1.0F, 1, 0.01F, 80);
 
@@ -150,40 +155,48 @@ public class GuiController {
 
     @FXML
     private void handleActionForward() {
-        if (!isMoveModeEnabled && !isRotateModeEnabled) {
+        if (!isMoveModeEnabled && !isRotateModeEnabled && !isScalingModeEnabled) {
             RADIUS += TRANSLATION;
-            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
             camera.movePosition(new Vector3D(newX, newY, newZ));
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnZClockwise(meshes.get(activeModel));
             }
-        } else {
+        } else if (isMoveModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.moveModelForward(meshes.get(activeModel));
+            }
+        } else {
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnXForward(meshes.get(activeModel));
             }
         }
     }
 
     @FXML
     private void handleActionBackward() {
-        if (!isMoveModeEnabled && !isRotateModeEnabled) {
+        if (!isMoveModeEnabled && !isRotateModeEnabled && !isScalingModeEnabled) {
             RADIUS -= TRANSLATION;
-            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
             camera.movePosition(new Vector3D(newX, newY, newZ));
         } else if (isRotateModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnZNotClockwise(meshes.get(activeModel));
             }
-        } else {
+        } else if (isMoveModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.moveModelBackward(meshes.get(activeModel));
+            }
+        } else {
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnXBackward(meshes.get(activeModel));
             }
         }
     }
@@ -197,12 +210,12 @@ public class GuiController {
             double deltaX = (event.getSceneX() - mouseX);
             double deltaY = (event.getSceneY() - mouseY);
 
-            ANGLEforXZ += deltaX % 360;
-            ANGLEforY += deltaY % 360;
+            ANGLEForXZ += deltaX % 360;
+            ANGLEForY += deltaY % 360;
 
-            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
             camera.movePosition(new Vector3D(newX, newY, newZ));
 
@@ -214,15 +227,15 @@ public class GuiController {
 
     @FXML
     private void handleActionLeft() {
-        if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            if (ANGLEforXZ < -360) {
-                ANGLEforXZ = 0;
+        if (!isMoveModeEnabled && !isRotateModeEnabled && !isScalingModeEnabled) {
+            if (ANGLEForXZ < -360) {
+                ANGLEForXZ = 0;
             }
-            ANGLEforXZ -= 1;
+            ANGLEForXZ -= 1;
 
-            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
             camera.movePosition(new Vector3D(newX, newY, newZ));
 
@@ -230,24 +243,28 @@ public class GuiController {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnXNotClockwise(meshes.get(activeModel));
             }
-        } else {
+        } else if (isMoveModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.moveModelLeft(meshes.get(activeModel));
+            }
+        } else {
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnZLeft(meshes.get(activeModel));
             }
         }
     }
 
     @FXML
     private void handleActionRight() {
-        if (!isMoveModeEnabled && !isRotateModeEnabled) {
-            if (ANGLEforXZ > 360) {
-                ANGLEforXZ = 0;
+        if (!isMoveModeEnabled && !isRotateModeEnabled && !isScalingModeEnabled) {
+            if (ANGLEForXZ > 360) {
+                ANGLEForXZ = 0;
             }
-            ANGLEforXZ += 1;
+            ANGLEForXZ += 1;
 
-            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+            float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+            float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+            float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
             camera.movePosition(new Vector3D(newX, newY, newZ));
 
@@ -255,9 +272,53 @@ public class GuiController {
             for (String activeModel : activeModels) {
                 Model.rotateModelOnXClockwise(meshes.get(activeModel));
             }
-        } else {
+        } else if (isMoveModeEnabled) {
             for (String activeModel : activeModels) {
                 Model.moveModelRight(meshes.get(activeModel));
+            }
+        } else {
+            for (String activeModel : activeModels) {
+                Model.scaleModelOnZRight(meshes.get(activeModel));
+            }
+        }
+    }
+
+    @FXML
+    private void handleActionOnYUp() {
+        if (isMoveModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.moveModelOnYUp(meshes.get(activeModel));
+            }
+        }
+    }
+
+    @FXML
+    private void handleActionOnYDown() {
+        if (isMoveModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.moveModelOnYDown(meshes.get(activeModel));
+            }
+        } else if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnYDown(meshes.get(activeModel));
+            }
+        }
+    }
+
+    @FXML
+    private void handleRotateRight() {
+        if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnYUp(meshes.get(activeModel));
+            }
+        }
+    }
+
+    @FXML
+    private void handleRotateLeft() {
+        if (isRotateModeEnabled) {
+            for (String activeModel : activeModels) {
+                Model.rotateModelOnYDown(meshes.get(activeModel));
             }
         }
     }
@@ -267,16 +328,16 @@ public class GuiController {
             double deltaY = event.getDeltaY();
             if (deltaY > 0) {
                 RADIUS += TRANSLATION;
-                float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-                float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-                float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+                float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+                float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+                float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
                 camera.movePosition(new Vector3D(newX, newY, newZ));
             } else if (deltaY < 0) {
                 RADIUS -= TRANSLATION;
-                float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getX());
-                float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY)) - camera.getPosition().getY());
-                float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)) - camera.getPosition().getZ());
+                float newX = (float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getX());
+                float newY = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY)) - camera.getPosition().getY());
+                float newZ = (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)) - camera.getPosition().getZ());
 
                 camera.movePosition(new Vector3D(newX, newY, newZ));
             }
@@ -285,13 +346,13 @@ public class GuiController {
 
     @FXML
     private void backToZeroCoordinates() {
-        ANGLEforXZ = 45;
-        ANGLEforY = 45;
+        ANGLEForXZ = 45;
+        ANGLEForY = 45;
         RADIUS = 10;
         camera = new Camera(
-                new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY))),
-                             (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforY))),
-                             (float) (RADIUS * Math.sin(Math.toRadians(ANGLEforXZ)) * Math.cos(Math.toRadians(ANGLEforY)))),
+                new Vector3D((float) (RADIUS * Math.cos(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY))),
+                        (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForY))),
+                        (float) (RADIUS * Math.sin(Math.toRadians(ANGLEForXZ)) * Math.cos(Math.toRadians(ANGLEForY)))),
                 new Vector3D(0, 0, 0),
                 1.0F, 1, 0.01F, 80);
     }
@@ -320,7 +381,13 @@ public class GuiController {
     @FXML
     private void toggleRotateMode() {
         isRotateModeEnabled = !isRotateModeEnabled;
-       style.setRotateButtonStyle();
+        style.setRotateButtonStyle();
+    }
+
+    @FXML
+    private void toggleScalingMode() {
+        isScalingModeEnabled = !isScalingModeEnabled;
+        style.setScalingButtonStyle();
     }
 
     public Canvas getCanvas() {
@@ -387,4 +454,18 @@ public class GuiController {
     public boolean isRotateModeEnabled() {
         return isRotateModeEnabled;
     }
+
+    public ImageView getButtonScaleImage() {
+        return buttonScaleImage;
+    }
+
+    public boolean isScalingModeEnabled() {
+        return isScalingModeEnabled;
+    }
+
+    public Button getButtonScale() {
+        return buttonScale;
+    }
+
+
 }

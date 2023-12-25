@@ -23,9 +23,11 @@ public class Style {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-sun-90.png")).toString());
         Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-white-50.png")).toString());
         Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-white-50.png")).toString());
+        Image imageScale = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-stretch-tool-white-96.png")).toString());
         guiController.getImage().setImage(image);
         guiController.getButtonMoveImage().setImage(imageMove);
         guiController.getButtonRotateImage().setImage(imageRotate);
+        guiController.getButtonScaleImage().setImage(imageScale);
         guiController.getFileMenu().getStyleClass().clear();
         guiController.getFileMenu().getStyleClass().add("menu");
     }
@@ -36,9 +38,11 @@ public class Style {
         Image image = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-moon-96.png")).toString());
         Image imageMove = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-move-50.png")).toString());
         Image imageRotate = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-3d-rotate-50.png")).toString());
+        Image imageScale = new Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-stretch-tool-96.png")).toString());
         guiController.getImage().setImage(image);
         guiController.getButtonMoveImage().setImage(imageMove);
         guiController.getButtonRotateImage().setImage(imageRotate);
+        guiController.getButtonScaleImage().setImage(imageScale);
         guiController.getFileMenu().getStyleClass().clear();
         guiController.getFileMenu().getStyleClass().add("menu");
     }
@@ -93,6 +97,16 @@ public class Style {
         } else {
             guiController.getButtonMove().getStyleClass().remove("button-move-pressed");
             guiController.getButtonMove().getStyleClass().add("button-move");
+        }
+    }
+
+    public void setScalingButtonStyle(){
+        if (guiController.isScalingModeEnabled()) {
+            guiController.getButtonScale().getStyleClass().remove("button-move");
+            guiController.getButtonScale().getStyleClass().add("button-move-pressed");
+    } else {
+            guiController.getButtonScale().getStyleClass().remove("button-move-pressed");
+            guiController.getButtonScale().getStyleClass().add("button-move");
         }
     }
 }
