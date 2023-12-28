@@ -74,3 +74,17 @@
     -fx-background-color: #28b1de;
     -fx-background-insets: 0, 1, 2;
 }
+
+.button-move-pressed {
+    -fx-background-color: #28b1de;
+    -fx-border-color: #28b1de;
+    -fx-border-radius: 10
+}
+
+.button-move-pressed:hover {
+    -fx-background-color: #6ccbed;
+}
+
+.button-move:hover {
+    -fx-background-color: #9b9595;
+}

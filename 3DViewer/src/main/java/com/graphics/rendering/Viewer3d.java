@@ -23,11 +23,19 @@ public class Viewer3d extends Application {
         stage.setMinWidth(bounds.getWidth());
         stage.setMinHeight(bounds.getHeight());
 
-        final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-        java.awt.Image image = defaultToolkit.getImage(getClass().getResource("/photo/icons8-mesh-96.png"));
-        final Taskbar taskbar = Taskbar.getTaskbar();
+        switch (Objects.requireNonNull(getOperatingSystem())) {
+            case WINDOWS:
+                javafx.scene.image.Image windowsImage = new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResource("/photo/icons8-mesh-96.png")).toString());
+                stage.getIcons().add(windowsImage);
+                break;
+            case MAC:
+                final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+                java.awt.Image image = defaultToolkit.getImage(getClass().getResource("/photo/icons8-mesh-96.png"));
+                final Taskbar taskbar = Taskbar.getTaskbar();
 
-        taskbar.setIconImage(image);
+                taskbar.setIconImage(image);
+                break;
+        }
 
         viewport.prefWidthProperty().bind(scene.widthProperty());
         viewport.prefHeightProperty().bind(scene.heightProperty());
@@ -40,4 +48,23 @@ public class Viewer3d extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+    public static OS getOperatingSystem() {
+        // detecting the operating system using `os.name` System property
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            return OS.WINDOWS;
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+            return OS.LINUX;
+        } else if (os.contains("mac")) {
+            return OS.MAC;
+        }
+
+        return null;
+    }
+}
+
+enum OS {
+    WINDOWS, LINUX, MAC, SOLARIS
 }
