@@ -20,13 +20,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+
 
 public class GuiController {
     @FXML
@@ -105,7 +108,7 @@ public class GuiController {
             handleCameraRotationOnMouseDrag(canvas);
 
             if (meshes != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height);
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height,canvas, Color.RED);
             }
         });
 

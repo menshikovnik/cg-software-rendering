@@ -222,4 +222,12 @@ public class Model {
         this.nameOfModel = nameOfModel;
         this.filePath = filePath;
     }
+
+    public void setVertices(ArrayList<Vector3D> vertices) {
+        this.vertices = vertices;
+    }
+
+    public void setPolygons(ArrayList<Polygon> polygons) {
+        this.polygons = polygons;
+    }
 }
