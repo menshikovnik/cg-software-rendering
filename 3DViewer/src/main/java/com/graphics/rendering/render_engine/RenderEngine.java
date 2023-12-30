@@ -59,6 +59,7 @@ public class RenderEngine {
                             resultPoints.get(0).x,
                             resultPoints.get(0).y);
             }
+//            NewTexture.NaloshenieText(mesh);
             RasterizationPolygon.rasterization(canvas,graphicsContext,mesh,camera,color);
         }
 
