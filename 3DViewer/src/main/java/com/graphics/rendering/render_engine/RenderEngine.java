@@ -3,7 +3,10 @@ package com.graphics.rendering.render_engine;
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector3D;
 import com.graphics.rendering.model.Model;
+import com.graphics.rendering.model.Polygon;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
@@ -18,7 +21,9 @@ public class RenderEngine {
             final Camera camera,
             final HashMap<String, Model> meshes,
             final int width,
-            final int height) {
+            final int height,
+            Canvas canvas,
+            Color color) {
         Matrix4D modelMatrix = translateRotateScale();
         Matrix4D viewMatrix = camera.getViewMatrix();
         Matrix4D projectionMatrix = camera.getProjectionMatrix();
@@ -54,6 +59,10 @@ public class RenderEngine {
                             resultPoints.get(0).x,
                             resultPoints.get(0).y);
             }
+//            NewTexture.NaloshenieText(mesh);
+            RasterizationPolygon.rasterization(canvas,graphicsContext,mesh,camera,color);
         }
+
     }
+
 }
