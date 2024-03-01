@@ -4,6 +4,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -16,7 +17,7 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="900.0" prefWidth="1120.0" styleClass="primary-color" stylesheets="@../../../../styles/darkMode.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.graphics.rendering.GuiController">
     <MenuBar prefHeight="24.0" prefWidth="263.0" styleClass="secondary-color">
-<!--                                            File menu                                                                -->
+        <!--                                            File menu                                                                -->
         <Menu fx:id="fileMenu" mnemonicParsing="false" styleClass="menu" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" styleClass="menu-item" text="Load Model">
                 <accelerator>
@@ -31,7 +32,7 @@
             </MenuItem>
         </Menu>
 
-<!--                                                      Camera Options menu                                                                 -->
+        <!--                                                      Camera Options menu                                                                 -->
         <Menu mnemonicParsing="false" text="Camera Options">
             <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Forward">
                 <accelerator>
@@ -60,117 +61,117 @@
                 </accelerator>
             </MenuItem>
         </Menu>
-<!--                                                         Model Options                                                                         -->
+        <!--                                                         Model Options                                                                         -->
         <Menu mnemonicParsing="false" text="Model Options">
-         <Menu mnemonicParsing="false" text="Move Options">
-                  <MenuItem mnemonicParsing="false" onAction="#handleActionOnYUp" text="Move Up">
-                      <accelerator>
-                          <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
-                      </accelerator>
-                  </MenuItem>
-      
-                  <MenuItem mnemonicParsing="false" onAction="#handleActionOnYDown" text="Move Down">
-                      <accelerator>
-                          <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
-                      </accelerator>
-                  </MenuItem>
+            <Menu mnemonicParsing="false" text="Move Options">
+                <MenuItem mnemonicParsing="false" onAction="#handleActionOnYUp" text="Move Up">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Move Right" >
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionOnYDown" text="Move Down">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Move Left" >
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Move Right">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Move Forward" >
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Move Left">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Move Backward" >
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
-         </Menu>
-         <Menu mnemonicParsing="false" text="Rotate Options">
-             <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Rotate On X Forward" >
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Move Forward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-             <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Rotate On X Backward" >
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Move Backward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Rotate Options">
+                <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Rotate On X Forward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleRotateRight" text="Rotate On Y Right">
-               <accelerator>
-                   <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
-               </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Rotate On X Backward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleRotateLeft" text="Rotate On Y Left">
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleRotateRight" text="Rotate On Y Right">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Rotate On Z Right">
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleRotateLeft" text="Rotate On Y Left">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="DOWN" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-               <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Rotate On Z Left">
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
-         </Menu>
-         <Menu mnemonicParsing="false" text="Scale Options">
-             <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Scale Forward">
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
-               <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Scale Backward">
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
-               <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Scale Right">
-                   <accelerator>
-                       <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator>
-               </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Rotate On Z Right">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-             <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Scale Left">
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Rotate On Z Left">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Scale Options">
+                <MenuItem mnemonicParsing="false" onAction="#handleActionForward" text="Scale Forward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionBackward" text="Scale Backward">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionRight" text="Scale Right">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-             <MenuItem mnemonicParsing="false" onAction="#handleScaleUp" text="Scale Up">
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#handleActionLeft" text="Scale Left">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="A" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
 
-             <MenuItem mnemonicParsing="false" onAction="#handleScaleDown" text="Scale Down">
-                 <accelerator>
-                     <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                 </accelerator>
-             </MenuItem>
-         </Menu>
+                <MenuItem mnemonicParsing="false" onAction="#handleScaleUp" text="Scale Up">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+
+                <MenuItem mnemonicParsing="false" onAction="#handleScaleDown" text="Scale Down">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                    </accelerator>
+                </MenuItem>
+            </Menu>
         </Menu>
     </MenuBar>
     <Canvas fx:id="canvas" height="870" styleClass="primary-color" width="1443.0" AnchorPane.topAnchor="30.0" />
@@ -226,9 +227,15 @@
             <String fx:value="button-move" />
         </styleClass>
         <graphic>
-            <ImageView fitHeight="36.0" fx:id="buttonScaleImage" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../../../../photo/icons8-stretch-tool-white-96.png" />
+            <ImageView fx:id="buttonScaleImage" fitHeight="36.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../../../photo/icons8-stretch-tool-white-96.png" />
             </ImageView>
         </graphic>
     </Button>
+   <TitledPane animated="false" layoutX="1238.0" layoutY="262.0" prefHeight="210.0" prefWidth="202.0" styleClass="primary-color" text="Render">
+     <content>
+       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="176.0" prefWidth="381.0" styleClass="primary-color" />
+     </content>
+   </TitledPane>
+   <ColorPicker fx:id="colorPicker" layoutX="1058.0" layoutY="12.0" />
 </AnchorPane>

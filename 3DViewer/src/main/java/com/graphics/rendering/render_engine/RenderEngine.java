@@ -60,7 +60,9 @@ public class RenderEngine {
                             resultPoints.get(0).y);
             }
 //            NewTexture.NaloshenieText(mesh);
-            RasterizationPolygon.rasterization(canvas,graphicsContext,mesh,camera,color);
+            if (mesh.getNameOfModel() != null) {
+                RasterizationPolygon.rasterization(canvas, graphicsContext, mesh, camera, color);
+            }
         }
 
     }

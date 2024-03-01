@@ -60,6 +60,8 @@ public class GuiController {
     private Button buttonRotate;
     @FXML
     private Button buttonScale;
+    @FXML
+    private ColorPicker colorPicker;
 
     private final float TRANSLATION = 0.3F;
 
@@ -108,7 +110,7 @@ public class GuiController {
             handleCameraRotationOnMouseDrag(canvas);
 
             if (meshes != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height,canvas, Color.RED);
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, meshes, (int) width, (int) height,canvas, colorPicker.getValue());
             }
         });
 

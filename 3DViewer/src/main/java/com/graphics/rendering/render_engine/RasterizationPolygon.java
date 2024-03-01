@@ -110,10 +110,8 @@ public class RasterizationPolygon {
 
     public static void drawLine(int y, GraphicsContext graphicsContext, Color color) {
         PixelWriter pixelWriter = graphicsContext.getPixelWriter();
-        double red = 0.4 * color.getRed();
         for (int x = (int) (wx1); x <= (int) (wx2); x++) {
-                Color pixelColor = Color.color(red, 0, 0);
-                pixelWriter.setColor(x, y, pixelColor);
+                pixelWriter.setColor(x, y, color);
         }
     }
 

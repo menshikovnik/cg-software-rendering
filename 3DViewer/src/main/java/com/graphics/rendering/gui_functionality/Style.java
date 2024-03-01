@@ -54,6 +54,7 @@ public class Style {
                 String fileContent = Files.readString(fileName);
                 if (i == 2) {
                     guiController.getMeshes().put("PcMonitor.001", ObjectReader.read(fileContent));
+                    guiController.getMeshes().get("PcMonitor.001").setNameOfModel("PcMonitor.001");
                     guiController.getFileNames().add("PcMonitor.001");
                     guiController.getModelNameView().setItems(guiController.getFileNames());
                 } else {
