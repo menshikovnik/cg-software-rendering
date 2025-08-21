@@ -3,6 +3,7 @@ module com.cgvsu {
     requires javafx.fxml;
     requires vecmath;
     requires java.desktop;
+    requires static lombok;
 
 
     opens com.graphics.rendering to javafx.fxml, org.junit.jupiter.api;

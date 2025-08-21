@@ -3,9 +3,11 @@ package com.graphics.rendering.model;
 import com.graphics.rendering.math.AffineTransformation;
 import com.graphics.rendering.math.vector.Vector2D;
 import com.graphics.rendering.math.vector.Vector3D;
+import lombok.Data;
 
 import java.util.ArrayList;
 
+@Data
 public class Model {
 
     private ArrayList<Vector3D> vertices = new ArrayList<>();
@@ -169,65 +171,8 @@ public class Model {
     }
 
 
-    public String getNameOfModel() {
-        return nameOfModel;
-    }
-
-    public void setNameOfModel(String nameOfModel) {
-        this.nameOfModel = nameOfModel;
-    }
-
-    public String getMaterialTemplateLib() {
-        return materialTemplateLib;
-    }
-
-    public void setMaterialTemplateLib(String materialTemplateLib) {
-        this.materialTemplateLib = materialTemplateLib;
-    }
-
-    public float getNormalInterpolationFactor() {
-        return normalInterpolationFactor;
-    }
-
-    public void setNormalInterpolationFactor(float normalInterpolationFactor) {
-        this.normalInterpolationFactor = normalInterpolationFactor;
-    }
-
-    public ArrayList<Vector3D> getVertices() {
-        return vertices;
-    }
-
-    public ArrayList<Vector2D> getTextureVertices() {
-        return textureVertices;
-    }
-
-    public ArrayList<Vector3D> getNormals() {
-        return normals;
-    }
-
-    public ArrayList<Polygon> getPolygons() {
-        return polygons;
-    }
-
-    public ArrayList<String> getNameOfMaterial() {
-        return nameOfMaterial;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-
     public void setNameOfModelAndFilePath(String nameOfModel, String filePath) {
         this.nameOfModel = nameOfModel;
         this.filePath = filePath;
-    }
-
-    public void setVertices(ArrayList<Vector3D> vertices) {
-        this.vertices = vertices;
-    }
-
-    public void setPolygons(ArrayList<Polygon> polygons) {
-        this.polygons = polygons;
     }
 }

@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import lombok.Data;
 
 
 import java.io.File;
@@ -30,7 +31,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-
+@Data
 public class GuiController {
     @FXML
     private AnchorPane anchorPane;
@@ -412,82 +413,9 @@ public class GuiController {
         style.setScalingButtonStyle();
     }
 
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
-    public HashMap<String, Model> getMeshes() {
-        return meshes;
-    }
-
     @FXML
     public AnchorPane getAnchorPane() {
         return anchorPane;
     }
-
-    public ListView<String> getModelNameView() {
-        return modelNameView;
-    }
-
-    public ContextMenu getContextMenu() {
-        return contextMenu;
-    }
-
-    public ObservableList<String> getFileNames() {
-        return fileNames;
-    }
-
-    public boolean isLightMode() {
-        return isLightMode;
-    }
-
-    public LinkedList<String> getActiveModels() {
-        return activeModels;
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
-    public ImageView getButtonMoveImage() {
-        return buttonMoveImage;
-    }
-
-    public ImageView getButtonRotateImage() {
-        return buttonRotateImage;
-    }
-
-    public Button getButtonMove() {
-        return buttonMove;
-    }
-
-    public Button getButtonRotate() {
-        return buttonRotate;
-    }
-
-    public Menu getFileMenu() {
-        return fileMenu;
-    }
-
-    public boolean isMoveModeEnabled() {
-        return isMoveModeEnabled;
-    }
-
-    public boolean isRotateModeEnabled() {
-        return isRotateModeEnabled;
-    }
-
-    public ImageView getButtonScaleImage() {
-        return buttonScaleImage;
-    }
-
-    public boolean isScalingModeEnabled() {
-        return isScalingModeEnabled;
-    }
-
-    public Button getButtonScale() {
-        return buttonScale;
-    }
-
 
 }

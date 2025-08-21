@@ -1,8 +1,11 @@
 package com.graphics.rendering.model;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
+@Data
 public class Polygon {
 
     private ArrayList<Integer> vertexIndices;
@@ -26,29 +29,5 @@ public class Polygon {
     @Override
     public int hashCode() {
         return Objects.hash(getVertexIndices(), getTextureVertexIndices(), getNormalIndices());
-    }
-
-    public void setVertexIndices(ArrayList<Integer> vertexIndices) {
-        this.vertexIndices = vertexIndices;
-    }
-
-    public void setTextureVertexIndices(ArrayList<Integer> textureVertexIndices) {
-        this.textureVertexIndices = textureVertexIndices;
-    }
-
-    public void setNormalIndices(ArrayList<Integer> normalIndices) {
-        this.normalIndices = normalIndices;
-    }
-
-    public ArrayList<Integer> getVertexIndices() {
-        return vertexIndices;
-    }
-
-    public ArrayList<Integer> getTextureVertexIndices() {
-        return textureVertexIndices;
-    }
-
-    public ArrayList<Integer> getNormalIndices() {
-        return normalIndices;
     }
 }

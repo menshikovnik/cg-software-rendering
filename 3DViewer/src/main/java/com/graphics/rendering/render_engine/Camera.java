@@ -2,8 +2,9 @@ package com.graphics.rendering.render_engine;
 
 import com.graphics.rendering.math.matrix.Matrix4D;
 import com.graphics.rendering.math.vector.Vector3D;
+import lombok.Data;
 
-
+@Data
 public class Camera {
     private Vector3D position;
     private Vector3D target;
@@ -25,26 +26,6 @@ public class Camera {
         this.aspectRatio = aspectRatio;
         this.nearPlane = nearPlane;
         this.farPlane = farPlane;
-    }
-
-    public void setPosition(final Vector3D position) {
-        this.position = position;
-    }
-
-    public void setTarget(final Vector3D target) {
-        this.target = target;
-    }
-
-    public void setAspectRatio(final float aspectRatio) {
-        this.aspectRatio = aspectRatio;
-    }
-
-    public Vector3D getPosition() {
-        return position;
-    }
-
-    public Vector3D getTarget() {
-        return target;
     }
 
     public void movePosition(final Vector3D translation) {
